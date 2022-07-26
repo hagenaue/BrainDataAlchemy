@@ -2,7 +2,7 @@
 #This file includes the detailed version of how to read in and extract the preprocessed data and statistical output for a single study (steps #0-5 mentioned below).  I'll put a more streamlined version in a separate file.
 #Megan Hagenauer
 #07-21-2022
-#Associated R workspace: Workspace_Example_MetaAnalysis_GemmaOutput.RData
+#Associated R workspace: 
 
 #At the top of the code document, I recommend giving the code document:
 #1) a title that will help you figure out what it contains in the future
@@ -661,13 +661,13 @@ str(grep('\\|', TempResultsJoined$Gene_Symbol))
 
 #For the sake of simple coding, I'm going to do this stepwise:
 
-#I only want the subset of data which contains rows that do not contain an NCBI ID of ""
+#I only want the subset of data which contains rows that do not contain a gene symbol of ""
 TempResultsJoined_NoNA<-TempResultsJoined[TempResultsJoined$Gene_Symbol!="",]
 
 str(TempResultsJoined_NoNA)
 #'data.frame':	29821 obs. of  18 variables:
 
-#... and I also only want the subset of that data which contains the rows that do not contain more than one NCBI ID separated by a pipe:
+#... and I also only want the subset of that data which contains the rows that do not contain more than one gene symbol separated by a pipe:
 #Adding the negative symbol before the indices for the rows means "not those rows"
 TempResultsJoined_NoNA_NoMultimapped<-TempResultsJoined_NoNA[-(grep('\\|', TempResultsJoined_NoNA$Gene_Symbol)),]
 
@@ -858,5 +858,7 @@ rm(TempResultsToJoin,TempAnalysisResults, TempResultsJoined, TempResultsJoined_N
 ###########
 
 #Alright, that code worked, but since I will be reading in a lot of datasets, I would really prefer to stream-line it to decrease the probabilty of error - I'll put that in a new file. :)
+
+
 
 
