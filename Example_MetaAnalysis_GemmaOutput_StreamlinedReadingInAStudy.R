@@ -5,6 +5,10 @@
 #Associated R workspace: "~/Documents/Teaching/Grinnell Interns 2022/Workspace_Example_MetaAnalysis_GemmaOutput.RData"
 
 
+#Problems to fix:
+#We need to calculate SE before averaging the t-stats and log2FC
+#We need to make sure our comparison names are unique (not used in different datasets) - dataset id + comparison?
+
 ####################
 
 #Goal:
@@ -292,6 +296,51 @@ str(TempResultsJoined_NoNA_NoMultimapped)
 #B) Which group comparisons are actually of interest to us.
 
 
+Log2FC1/Tstat1=SE1
+Log2FC2/Tstat2=SE2
+
+mean(c(Log2FC1, Log2FC2))/mean(c(Tstat1, Tstat2))=mean(SE1, SE2)
+
+Log2FC1<-0.10
+Log2FC2<-0.20
+
+Tstat1<-1.5
+Tstat2<-3.0
+
+Log2FC1/Tstat1
+#0.03333333
+
+Log2FC2/Tstat2
+#[1] 0.06666667
+
+mean(c(0.03333333, 0.06666667))
+#[1] 0.05
+# mean SE
+
+mean(c(Log2FC1, Log2FC2))/mean(c(Tstat1, Tstat2))
+#[1] 0.05
+
+Log2FC1<-0.10
+Log2FC2<-(-0.10)
+
+Tstat1<-1.5
+Tstat2<-(-3.0)
+
+Log2FC1/Tstat1
+#[1] 0.06666667
+
+Log2FC2/Tstat2
+#[1] 0.03333333
+
+mean(c(0.06666667,0.03333333))
+#[1] 0.05
+
+mean(c(Log2FC1, Log2FC2))/mean(c(Tstat1, Tstat2))
+#[1] 0
+
+mean(c(0.10, -0.10))
+
+
 CollapsingDEResults_OneResultPerGene<-function(GSE_ID, TempResultsJoined_NoNA_NoMultimapped, ComparisonsOfInterest, NamesOfFoldChangeColumns, NamesOfTstatColumns){
   
 print("Double check that the vectors containing the two fold change and tstat column names contain the same order as the group comparisons of interest - otherwise this function won't work properly!  If the order matches, proceed:")
@@ -321,12 +370,13 @@ colnames(TempResultsJoined_NoNA_NoMultimapped_FoldChange_AveragedByGeneSymbol)<-
 
 write.csv(TempResultsJoined_NoNA_NoMultimapped_FoldChange_AveragedByGeneSymbol, "TempResultsJoined_NoNA_NoMultimapped_FoldChange_AveragedByGeneSymbol.csv")
 
+
 TempResultsJoined_NoNA_NoMultimapped_Tstat_Average<-list()
 
 for(i in c(1:length(NamesOfFoldChangeColumns))){
   
-TempResultsJoined_NoNA_NoMultimapped_Tstat_Average[[i]]<-tapply(NamesOfTstatColumns[i][[1]], TempResultsJoined_NoNA_NoMultimapped$Gene_Symbol, mean)
-
+  TempResultsJoined_NoNA_NoMultimapped_Tstat_Average[[i]]<-tapply(NamesOfTstatColumns[i][[1]], TempResultsJoined_NoNA_NoMultimapped$Gene_Symbol, mean)
+  
 }
 
 TempResultsJoined_NoNA_NoMultimapped_Tstat_AveragedByGeneSymbol<-do.call(cbind, TempResultsJoined_NoNA_NoMultimapped_Tstat_Average)
@@ -335,23 +385,37 @@ colnames(TempResultsJoined_NoNA_NoMultimapped_Tstat_AveragedByGeneSymbol)<-Compa
 
 write.csv(TempResultsJoined_NoNA_NoMultimapped_Tstat_AveragedByGeneSymbol, "TempResultsJoined_NoNA_NoMultimapped_Tstat_AveragedByGeneSymbol.csv")
 
-#Calculating SE:  
-TempResultsJoined_NoNA_NoMultimapped_SE<-TempResultsJoined_NoNA_NoMultimapped_FoldChange_AveragedByGeneSymbol/TempResultsJoined_NoNA_NoMultimapped_Tstat_AveragedByGeneSymbol
 
-colnames(TempResultsJoined_NoNA_NoMultimapped_SE)<-ComparisonsOfInterest
 
-write.csv(TempResultsJoined_NoNA_NoMultimapped_SE, "TempResultsJoined_NoNA_NoMultimapped_SE.csv")
+TempResultsJoined_NoNA_NoMultimapped_SE<-list()
+
+for(i in c(1:length(NamesOfFoldChangeColumns))){
+  TempResultsJoined_NoNA_NoMultimapped_SE[[i]]<-NamesOfFoldChangeColumns[i][[1]]/NamesOfTstatColumns[i][[1]]
+}
+
+
+TempResultsJoined_NoNA_NoMultimapped_SE_Average<-list()
+
+for(i in c(1:length(NamesOfFoldChangeColumns))){
+  
+  TempResultsJoined_NoNA_NoMultimapped_SE_Average[[i]]<-tapply(TempResultsJoined_NoNA_NoMultimapped_SE[[i]], TempResultsJoined_NoNA_NoMultimapped$Gene_Symbol, mean)
+  
+}
+
+TempResultsJoined_NoNA_NoMultimapped_SE_AveragedByGeneSymbol<-do.call(cbind, TempResultsJoined_NoNA_NoMultimapped_SE_Average)
+
+colnames(TempResultsJoined_NoNA_NoMultimapped_SE_AveragedByGeneSymbol)<-ComparisonsOfInterest
+
+write.csv(TempResultsJoined_NoNA_NoMultimapped_SE_AveragedByGeneSymbol, "TempResultsJoined_NoNA_NoMultimapped_SE_AveragedByGeneSymbol.csv")
 
 #For running our meta-analysis, we are actually going to need the sampling variance instead of the standard error
 #The sampling variance is just the standard error squared.
 
-TempResultsJoined_NoNA_NoMultimapped_SV<-(TempResultsJoined_NoNA_NoMultimapped_SE)^2
-
-colnames(TempResultsJoined_NoNA_NoMultimapped_SV)<-ComparisonsOfInterest
+TempResultsJoined_NoNA_NoMultimapped_SV<-(TempResultsJoined_NoNA_NoMultimapped_SE_AveragedByGeneSymbol)^2
 
 write.csv(TempResultsJoined_NoNA_NoMultimapped_SV, "TempResultsJoined_NoNA_NoMultimapped_SV.csv")
 
-TempMasterResults<-list(Log2FC=TempResultsJoined_NoNA_NoMultimapped_FoldChange_AveragedByGeneSymbol, Tstat=TempResultsJoined_NoNA_NoMultimapped_Tstat_AveragedByGeneSymbol, SE=TempResultsJoined_NoNA_NoMultimapped_SE, SV=TempResultsJoined_NoNA_NoMultimapped_SV)
+TempMasterResults<-list(Log2FC=TempResultsJoined_NoNA_NoMultimapped_FoldChange_AveragedByGeneSymbol, Tstat=TempResultsJoined_NoNA_NoMultimapped_Tstat_AveragedByGeneSymbol, SE=TempResultsJoined_NoNA_NoMultimapped_SE_AveragedByGeneSymbol, SV=TempResultsJoined_NoNA_NoMultimapped_SV)
 
 assign(paste("DEResults", GSE_ID, sep="_"), TempMasterResults, envir = as.environment(1))
 
@@ -401,6 +465,28 @@ str(DEResults_GSE59070)
 # .. ..$ : chr [1:2] "Stress8days_vs_Acute" "Stress13days_vs_Acute"
 
 head(DEResults_GSE59070[[1]])
+
+head(TempResultsJoined_NoNA_NoMultimapped$Gene_Symbol)
+colnames(NamesOfFoldChangeColumns)
+
+NamesOfFoldChangeColumns[1][[1]][TempResultsJoined_NoNA_NoMultimapped$Gene_Symbol=="0610009B22Rik"]
+#[1] 0.1323 0.2036
+
+NamesOfTstatColumns[1][[1]][TempResultsJoined_NoNA_NoMultimapped$Gene_Symbol=="0610009B22Rik"]
+#[1] 1.001 2.368
+
+0.1323/1.001
+#[1] 0.1321678
+
+0.2036/2.368
+#[1] 0.08597973
+
+mean(c(0.1321678,0.08597973))
+#[1] 0.1090738
+
+NamesOfFoldChangeColumns[i][[1]]/NamesOfTstatColumns[i][[1]]
+
+"0610005C13Rik"
 
 ###########
 
@@ -925,3 +1011,295 @@ str(TempResultsJoined)
 #Hmmm.... It turns out that this analysis isn't broken down by brain region.
 #If we wanted to use this dataset we would need to re-analyze it using only the hippocampal data.
 
+
+###########################
+
+#Reading in more data:
+
+#I want to play with adding a predictor variable to my random-effects meta-analysis.
+#To test it out, I'm going to read in datasets from the DG, and then add dissection as a predictor:
+
+#GSE56028 - unpredictable chronic mild stress (CUMS), Dentate Gyrus (DG)
+#GSE132819 - CSDS, DG
+#GSE84183 - CUMS, DG
+
+#GSE84185 - CUMS, DG - it turns out this one is actually only anterior cingulate cortex
+
+#Interestingly enough, none of these results were already downloaded
+
+
+#GSE56028 
+
+setwd("~/Documents/SideProjects/BrainGMT/Gemma/Hippocampus/Download_20220728/11625_GSE56028_diffExpAnalysis_94710")
+list.files()
+#[1] "analysis.results.txt"        "resultset_ID478752.data.txt" "resultset_ID478753.data.txt"
+
+ReadingInGemmaDE(ResultSetFileNames=c("resultset_ID478752.data.txt","resultset_ID478753.data.txt"))
+#[1] "Outputted object: TempResultsJoined"
+
+str(TempResultsJoined)
+# 'data.frame':	29185 obs. of  22 variables:
+#   $ Element_Name                                                                                      : int  10754876 10887640 10762224 10798094 10773266 10830285 10881771 10711706 10804508 10840076 ...
+# $ Gene_Symbol                                                                                       : chr  "" "" "" "Fam50b" ...
+# $ Gene_Name                                                                                         : chr  "" "" "" "family with sequence similarity 50, member B" ...
+# $ NCBI_ID                                                                                           : chr  "" "" "" "306883" ...
+# $ FoldChange_chronic.mild.stress                                                                    : num  0.07155 0.00303 -0.04226 -0.1682 -0.1216 ...
+# $ Tstat_chronic.mild.stress                                                                         : num  1.002 0.0495 -0.5552 -1.16 -2.221 ...
+# $ PValue_chronic.mild.stress                                                                        : num  0.3321 0.9612 0.5869 0.2642 0.0422 ...
+# $ Gene_Symbol                                                                                       : chr  "" "" "" "Fam50b" ...
+# $ Gene_Name                                                                                         : chr  "" "" "" "family with sequence similarity 50, member B" ...
+# $ NCBI_ID                                                                                           : chr  "" "" "" "306883" ...
+# $ FoldChange_fluoxetine                                                                             : num  0.0208 0.0592 0.0375 0.2264 0.0511 ...
+# $ Tstat_fluoxetine                                                                                  : num  0.252 0.838 0.426 1.352 0.808 ...
+# $ PValue_fluoxetine                                                                                 : num  0.804 0.415 0.676 0.196 0.431 ...
+# $ FoldChange_imipramine                                                                             : num  -0.1323 -0.00332 0.0608 0.0996 -0.0333 ...
+# $ Tstat_imipramine                                                                                  : num  -1.605 -0.0469 0.6918 0.5947 -0.527 ...
+# $ PValue_imipramine                                                                                 : num  0.129 0.963 0.5 0.561 0.606 ...
+# $ FoldChange_7.3.chloro.6.methyl.5.5.dioxo.11H.benzo.c.2.1.benzothiazepin.11.yl.amino.heptanoic.acid: num  -0.0622 0.0185 0.0926 0.0873 0.0452 ...
+# $ Tstat_7.3.chloro.6.methyl.5.5.dioxo.11H.benzo.c.2.1.benzothiazepin.11.yl.amino.heptanoic.acid     : num  -0.755 0.262 1.053 0.521 0.716 ...
+# $ PValue_7.3.chloro.6.methyl.5.5.dioxo.11H.benzo.c.2.1.benzothiazepin.11.yl.amino.heptanoic.acid    : num  0.462 0.797 0.309 0.61 0.485 ...
+# $ FoldChange_agomelatine                                                                            : num  -0.0761 -0.0388 -0.0308 0.2495 0.0507 ...
+# $ Tstat_agomelatine                                                                                 : num  -0.923 -0.549 -0.35 1.49 0.801 ...
+# $ PValue_agomelatine                                                                                : num  0.37 0.591 0.731 0.157 0.435 ...
+
+FilteringDEResults_GoodAnnotation(TempResultsJoined)
+# [1] "# of rows with missing NCBI annotation:"
+# [1] 11911
+# [1] "# of rows with missing Gene Symbol annotation:"
+# [1] 11911
+# [1] "# of rows mapped to multiple NCBI_IDs:"
+# [1] 865
+# [1] "# of rows mapped to multiple Gene Symbols:"
+# [1] 865
+# [1] "# of rows with good annotation"
+# [1] 16409
+# [1] "Outputted object: TempResultsJoined_NoNA_NoMultimapped"
+
+str(TempResultsJoined_NoNA_NoMultimapped)
+# 'data.frame':	16409 obs. of  22 variables:
+#   $ Element_Name                                                                                      : int  10798094 10773266 10830285 10881771 10840076 10787129 10936526 10923385 10714409 10715870 ...
+# $ Gene_Symbol                                                                                       : chr  "Fam50b" "Evc" "Tspyl4" "Nmnat1" ...
+# $ Gene_Name                                                                                         : chr  "family with sequence similarity 50, member B" "EvC ciliary complex subunit 1" "TSPY-like 4" "nicotinamide nucleotide adenylyltransferase 1" ...
+# $ NCBI_ID                                                                                           : chr  "306883" "289712" "309828" "298653" ...
+# $ FoldChange_chronic.mild.stress                                                                    : num  -0.1682 -0.1216 0.0612 -0.0278 0.0561 ...
+# $ Tstat_chronic.mild.stress                                                                         : num  -1.16 -2.221 1.439 -0.342 0.946 ...
+# $ PValue_chronic.mild.stress                                                                        : num  0.2642 0.0422 0.1707 0.7375 0.3594 ...
+# $ Gene_Symbol                                                                                       : chr  "Fam50b" "Evc" "Tspyl4" "Nmnat1" ...
+# $ Gene_Name                                                                                         : chr  "family with sequence similarity 50, member B" "EvC ciliary complex subunit 1" "TSPY-like 4" "nicotinamide nucleotide adenylyltransferase 1" ...
+# $ NCBI_ID                                                                                           : chr  "306883" "289712" "309828" "298653" ...
+# $ FoldChange_fluoxetine                                                                             : num  0.2264 0.0511 -0.0255 -0.1751 -0.1317 ...
+# $ Tstat_fluoxetine                                                                                  : num  1.352 0.808 -0.52 -1.861 -1.923 ...
+# $ PValue_fluoxetine                                                                                 : num  0.1964 0.4315 0.6106 0.0824 0.0737 ...
+# $ FoldChange_imipramine                                                                             : num  0.0996 -0.0333 -0.0893 0.0546 -0.0403 ...
+# $ Tstat_imipramine                                                                                  : num  0.595 -0.527 -1.819 0.58 -0.589 ...
+# $ PValue_imipramine                                                                                 : num  0.561 0.606 0.089 0.57 0.565 ...
+# $ FoldChange_7.3.chloro.6.methyl.5.5.dioxo.11H.benzo.c.2.1.benzothiazepin.11.yl.amino.heptanoic.acid: num  0.0873 0.0452 -0.072 -0.0301 -0.0846 ...
+# $ Tstat_7.3.chloro.6.methyl.5.5.dioxo.11H.benzo.c.2.1.benzothiazepin.11.yl.amino.heptanoic.acid     : num  0.521 0.716 -1.465 -0.321 -1.234 ...
+# $ PValue_7.3.chloro.6.methyl.5.5.dioxo.11H.benzo.c.2.1.benzothiazepin.11.yl.amino.heptanoic.acid    : num  0.61 0.485 0.164 0.753 0.236 ...
+# $ FoldChange_agomelatine                                                                            : num  0.2495 0.0507 0.0254 -0.1148 0.0524 ...
+# $ Tstat_agomelatine                                                                                 : num  1.49 0.801 0.516 -1.22 0.764 ...
+# $ PValue_agomelatine                                                                                : num  0.157 0.435 0.613 0.241 0.456 ...
+
+CollapsingDEResults_OneResultPerGene(GSE_ID="GSE56028", TempResultsJoined_NoNA_NoMultimapped, ComparisonsOfInterest = c("CMS_vs_Ctrl"), NamesOfFoldChangeColumns=list(TempResultsJoined_NoNA_NoMultimapped$FoldChange_chronic.mild.stress), NamesOfTstatColumns = list(TempResultsJoined_NoNA_NoMultimapped$Tstat_chronic.mild.stress))
+# [1] "Double check that the vectors containing the two fold change and tstat column names contain the same order as the group comparisons of interest - otherwise this function won't work properly!  If the order matches, proceed:"
+# [1] "# of rows with unique NCBI IDs:"
+# [1] 15617
+# [1] "# of rows with unique Gene Symbols:"
+# [1] 15617
+# [1] "Dimensions of Fold Change matrix, averaged by gene symbol:"
+# [1] 15617     1
+# [1] "Output: Named DEResults_GSE56028"
+
+str(DEResults_GSE56028)
+# List of 4
+# $ Log2FC: num [1:15617, 1] -0.0819 -0.0412 0.2211 -0.041 0.0327 ...
+# ..- attr(*, "dimnames")=List of 2
+# .. ..$ : chr [1:15617] "A1bg" "A1cf" "A2m" "A3galt2" ...
+# .. ..$ : chr "CMS_vs_Ctrl"
+# $ Tstat : num [1:15617, 1] -0.816 -0.442 1.454 -0.594 0.374 ...
+# ..- attr(*, "dimnames")=List of 2
+# .. ..$ : chr [1:15617] "A1bg" "A1cf" "A2m" "A3galt2" ...
+# .. ..$ : chr "CMS_vs_Ctrl"
+# $ SE    : num [1:15617, 1] 0.1003 0.0932 0.1521 0.0691 0.0874 ...
+# ..- attr(*, "dimnames")=List of 2
+# .. ..$ : chr [1:15617] "A1bg" "A1cf" "A2m" "A3galt2" ...
+# .. ..$ : chr "CMS_vs_Ctrl"
+# $ SV    : num [1:15617, 1] 0.01006 0.00868 0.02312 0.00477 0.00764 ...
+# ..- attr(*, "dimnames")=List of 2
+# .. ..$ : chr [1:15617] "A1bg" "A1cf" "A2m" "A3galt2" ...
+# .. ..$ : chr "CMS_vs_Ctrl"
+
+###################
+
+##GSE132819 
+
+setwd("~/Documents/SideProjects/BrainGMT/Gemma/Hippocampus/Download_20220728/16823_GSE132819_diffExpAnalysis_158973")
+# [1] "analysis.results.txt"        "resultset_ID492986.data.txt"
+
+ReadingInGemmaDE(ResultSetFileNames=c("resultset_ID492986.data.txt"))
+#[1] "Outputted object: TempResultsJoined"
+
+str(TempResultsJoined)
+# 'data.frame':	35544 obs. of  7 variables:
+#   $ Element_Name                                        : int  10462973 10528622 10539433 10342852 10457918 10338528 10340471 10433445 10573203 10461553 ...
+# $ Gene_Symbol                                         : chr  "Hells" "Asb10" "" "" ...
+# $ Gene_Name                                           : chr  "helicase, lymphoid specific" "ankyrin repeat and SOCS box-containing 10" "" "" ...
+# $ NCBI_ID                                             : chr  "15201" "117590" "" "" ...
+# $ FoldChange_chronic.social.defeat.stress.CSDS._Stress: num  -0.0349 0.0919 0.1705 -0.4519 0.066 ...
+# $ Tstat_chronic.social.defeat.stress.CSDS._Stress     : num  -0.282 3.039 2.829 -1.777 0.201 ...
+# $ PValue_chronic.social.defeat.stress.CSDS._Stress    : num  0.7922 0.0384 0.0474 0.1502 0.8504 ...
+
+FilteringDEResults_GoodAnnotation(TempResultsJoined)
+# [1] "# of rows with missing NCBI annotation:"
+# [1] 12066
+# [1] "# of rows with missing Gene Symbol annotation:"
+# [1] 12066
+# [1] "# of rows mapped to multiple NCBI_IDs:"
+# [1] 1500
+# [1] "# of rows mapped to multiple Gene Symbols:"
+# [1] 1500
+# [1] "# of rows with good annotation"
+# [1] 21978
+# [1] "Outputted object: TempResultsJoined_NoNA_NoMultimapped"
+
+str(TempResultsJoined_NoNA_NoMultimapped)
+# 'data.frame':	21978 obs. of  7 variables:
+#   $ Element_Name                                        : int  10462973 10528622 10433445 10573203 10461553 10384737 10441032 10578984 10591125 10479948 ...
+# $ Gene_Symbol                                         : chr  "Hells" "Asb10" "Abat" "Gipc1" ...
+# $ Gene_Name                                           : chr  "helicase, lymphoid specific" "ankyrin repeat and SOCS box-containing 10" "4-aminobutyrate aminotransferase" "GIPC PDZ domain containing family, member 1" ...
+# $ NCBI_ID                                             : chr  "15201" "117590" "268860" "67903" ...
+# $ FoldChange_chronic.social.defeat.stress.CSDS._Stress: num  -0.03489 0.09189 -0.000943 0.06286 0.07481 ...
+# $ Tstat_chronic.social.defeat.stress.CSDS._Stress     : num  -0.2817 3.039 -0.0191 1.453 0.4529 ...
+# $ PValue_chronic.social.defeat.stress.CSDS._Stress    : num  0.7922 0.0384 0.9857 0.2198 0.6741 ...
+
+CollapsingDEResults_OneResultPerGene(GSE_ID="GSE132819", TempResultsJoined_NoNA_NoMultimapped, ComparisonsOfInterest = c("CSDS_vs_Ctrl"), NamesOfFoldChangeColumns=list(TempResultsJoined_NoNA_NoMultimapped$FoldChange_chronic.social.defeat.stress.CSDS._Stress), NamesOfTstatColumns = list(TempResultsJoined_NoNA_NoMultimapped$Tstat_chronic.social.defeat.stress.CSDS._Stress))
+# [1] "Double check that the vectors containing the two fold change and tstat column names contain the same order as the group comparisons of interest - otherwise this function won't work properly!  If the order matches, proceed:"
+# [1] "# of rows with unique NCBI IDs:"
+# [1] 20240
+# [1] "# of rows with unique Gene Symbols:"
+# [1] 20240
+# [1] "Dimensions of Fold Change matrix, averaged by gene symbol:"
+# [1] 20240     1
+# [1] "Output: Named DEResults_GSE132819"
+
+str(DEResults_GSE81672)
+#List of 4
+# $ Log2FC: num [1:21766, 1:2] 0.155 0.1 0.7492 -0.1075 -0.0212 ...
+# ..- attr(*, "dimnames")=List of 2
+# .. ..$ : chr [1:21766] "0610005C13Rik" "0610009B22Rik" "0610009E02Rik" "0610009L18Rik" ...
+# .. ..$ : chr [1:2] "StressResistent_vs_Ctrl" "StressSusceptible_vs_Ctrl"
+# $ Tstat : num [1:21766, 1:2] 0.21 1.025 1.499 -0.984 -0.258 ...
+# ..- attr(*, "dimnames")=List of 2
+# .. ..$ : chr [1:21766] "0610005C13Rik" "0610009B22Rik" "0610009E02Rik" "0610009L18Rik" ...
+# .. ..$ : chr [1:2] "StressResistent_vs_Ctrl" "StressSusceptible_vs_Ctrl"
+# $ SE    : num [1:21766, 1:2] 0.7395 0.0975 0.4998 0.1093 0.082 ...
+# ..- attr(*, "dimnames")=List of 2
+# .. ..$ : chr [1:21766] "0610005C13Rik" "0610009B22Rik" "0610009E02Rik" "0610009L18Rik" ...
+# .. ..$ : chr [1:2] "StressResistent_vs_Ctrl" "StressSusceptible_vs_Ctrl"
+# $ SV    : num [1:21766, 1:2] 0.54687 0.00951 0.2498 0.01194 0.00673 ...
+# ..- attr(*, "dimnames")=List of 2
+# .. ..$ : chr [1:21766] "0610005C13Rik" "0610009B22Rik" "0610009E02Rik" "0610009L18Rik" ...
+# .. ..$ : chr [1:2] "StressResistent_vs_Ctrl" "StressSusceptible_vs_Ctrl"
+
+###################
+
+#GSE84183
+
+setwd("~/Documents/SideProjects/BrainGMT/Gemma/Hippocampus/Download_20220728/13908_GSE84183_diffExpAnalysis_101525")
+list.files()
+#[1] "analysis.results.txt"        "resultset_ID481861.data.txt" "resultset_ID481862.data.txt"
+
+ReadingInGemmaDE(ResultSetFileNames=c("resultset_ID481861.data.txt","resultset_ID481862.data.txt"))
+#[1] "Outputted object: TempResultsJoined"
+
+str(TempResultsJoined)
+# 'data.frame':	59269 obs. of  13 variables:
+#   $ Element_Name                                : int  8908 16375 5302 29710 19071 4245 62102 57703 45441 56484 ...
+# $ Gene_Symbol                                 : chr  "" "" "C030037F17Rik" "" ...
+# $ Gene_Name                                   : chr  "" "" "RIKEN cDNA C030037F17 gene" "" ...
+# $ NCBI_ID                                     : chr  "" "" "77475" "" ...
+# $ FoldChange_fluoxetine                       : num  -0.00468 0.00391 0.00311 0.00154 0.00749 ...
+# $ Tstat_fluoxetine                            : num  -0.454 0.119 0.872 0.505 0.429 ...
+# $ PValue_fluoxetine                           : num  0.653 0.906 0.391 0.618 0.671 ...
+# $ Gene_Symbol                                 : chr  "" "" "C030037F17Rik" "" ...
+# $ Gene_Name                                   : chr  "" "" "RIKEN cDNA C030037F17 gene" "" ...
+# $ NCBI_ID                                     : chr  "" "" "77475" "" ...
+# $ FoldChange_unpredictable.chronic.mild.stress: num  -0.00944 0.001513 0.001457 0.000724 0.0179 ...
+# $ Tstat_unpredictable.chronic.mild.stress     : num  -0.915 0.046 0.408 0.237 1.026 ...
+# $ PValue_unpredictable.chronic.mild.stress    : num  0.368 0.964 0.686 0.815 0.314 ...
+
+FilteringDEResults_GoodAnnotation(TempResultsJoined)
+# [1] "# of rows with missing NCBI annotation:"
+# [1] 29100
+# [1] "# of rows with missing Gene Symbol annotation:"
+# [1] 29100
+# [1] "# of rows mapped to multiple NCBI_IDs:"
+# [1] 1713
+# [1] "# of rows mapped to multiple Gene Symbols:"
+# [1] 1713
+# [1] "# of rows with good annotation"
+# [1] 28456
+# [1] "Outputted object: TempResultsJoined_NoNA_NoMultimapped"
+
+str(TempResultsJoined_NoNA_NoMultimapped)
+# 'data.frame':	28456 obs. of  13 variables:
+#   $ Element_Name                                : int  5302 4245 45441 7627 28812 50135 25307 41653 19070 35803 ...
+# $ Gene_Symbol                                 : chr  "C030037F17Rik" "Cradd" "Gm9917" "Amer2" ...
+# $ Gene_Name                                   : chr  "RIKEN cDNA C030037F17 gene" "CASP2 and RIPK1 domain containing adaptor with death domain" "predicted gene 9917" "APC membrane recruitment 2" ...
+# $ NCBI_ID                                     : chr  "77475" "12905" "100038755" "72125" ...
+# $ FoldChange_fluoxetine                       : num  0.00311 -0.1486 -0.01355 -0.0073 -0.08482 ...
+# $ Tstat_fluoxetine                            : num  0.872 -10.44 -0.903 -0.637 -8.466 ...
+# $ PValue_fluoxetine                           : num  3.91e-01 3.71e-11 3.74e-01 5.29e-01 3.31e-09 ...
+# $ Gene_Symbol                                 : chr  "C030037F17Rik" "Cradd" "Gm9917" "Amer2" ...
+# $ Gene_Name                                   : chr  "RIKEN cDNA C030037F17 gene" "CASP2 and RIPK1 domain containing adaptor with death domain" "predicted gene 9917" "APC membrane recruitment 2" ...
+# $ NCBI_ID                                     : chr  "77475" "12905" "100038755" "72125" ...
+# $ FoldChange_unpredictable.chronic.mild.stress: num  0.00146 -0.02855 -0.01814 0.02393 -0.0741 ...
+# $ Tstat_unpredictable.chronic.mild.stress     : num  0.408 -2.005 -1.21 2.091 -7.396 ...
+# $ PValue_unpredictable.chronic.mild.stress    : num  6.86e-01 5.47e-02 2.36e-01 4.57e-02 4.71e-08 ...
+
+CollapsingDEResults_OneResultPerGene(GSE_ID="GSE84183", TempResultsJoined_NoNA_NoMultimapped, ComparisonsOfInterest = c("CMS_vs_Ctrl"), NamesOfFoldChangeColumns=list(TempResultsJoined_NoNA_NoMultimapped$FoldChange_unpredictable.chronic.mild.stress), NamesOfTstatColumns = list(TempResultsJoined_NoNA_NoMultimapped$Tstat_unpredictable.chronic.mild.stress))
+
+# [1] "Double check that the vectors containing the two fold change and tstat column names contain the same order as the group comparisons of interest - otherwise this function won't work properly!  If the order matches, proceed:"
+# [1] "# of rows with unique NCBI IDs:"
+# [1] 17336
+# [1] "# of rows with unique Gene Symbols:"
+# [1] 17336
+# [1] "Dimensions of Fold Change matrix, averaged by gene symbol:"
+# [1] 17336     1
+# [1] "Output: Named DEResults_GSE84183"
+
+str(DEResults_GSE81672)
+# List of 4
+# $ Log2FC: num [1:21766, 1:2] 0.155 0.1 0.7492 -0.1075 -0.0212 ...
+# ..- attr(*, "dimnames")=List of 2
+# .. ..$ : chr [1:21766] "0610005C13Rik" "0610009B22Rik" "0610009E02Rik" "0610009L18Rik" ...
+# .. ..$ : chr [1:2] "StressResistent_vs_Ctrl" "StressSusceptible_vs_Ctrl"
+# $ Tstat : num [1:21766, 1:2] 0.21 1.025 1.499 -0.984 -0.258 ...
+# ..- attr(*, "dimnames")=List of 2
+# .. ..$ : chr [1:21766] "0610005C13Rik" "0610009B22Rik" "0610009E02Rik" "0610009L18Rik" ...
+# .. ..$ : chr [1:2] "StressResistent_vs_Ctrl" "StressSusceptible_vs_Ctrl"
+# $ SE    : num [1:21766, 1:2] 0.7395 0.0975 0.4998 0.1093 0.082 ...
+# ..- attr(*, "dimnames")=List of 2
+# .. ..$ : chr [1:21766] "0610005C13Rik" "0610009B22Rik" "0610009E02Rik" "0610009L18Rik" ...
+# .. ..$ : chr [1:2] "StressResistent_vs_Ctrl" "StressSusceptible_vs_Ctrl"
+# $ SV    : num [1:21766, 1:2] 0.54687 0.00951 0.2498 0.01194 0.00673 ...
+# ..- attr(*, "dimnames")=List of 2
+# .. ..$ : chr [1:21766] "0610005C13Rik" "0610009B22Rik" "0610009E02Rik" "0610009L18Rik" ...
+# .. ..$ : chr [1:2] "StressResistent_vs_Ctrl" "StressSusceptible_vs_Ctrl"
+
+###################
+
+setwd("~/Documents/SideProjects/BrainGMT/Gemma/Hippocampus/16574_GSE81672_diffExpAnalysis_158324")
+list.files()
+
+ReadingInGemmaDE(ResultSetFileNames=c("resultset_ID492708.data.txt", "resultset_ID492709.data.txt"))
+
+str(TempResultsJoined)
+
+FilteringDEResults_GoodAnnotation(TempResultsJoined)
+
+str(TempResultsJoined_NoNA_NoMultimapped)
+
+CollapsingDEResults_OneResultPerGene(GSE_ID="GSE81672", TempResultsJoined_NoNA_NoMultimapped, ComparisonsOfInterest = c("StressResistent_vs_Ctrl", "StressSusceptible_vs_Ctrl"), NamesOfFoldChangeColumns=list(TempResultsJoined_NoNA_NoMultimapped$FoldChange_resistant.to, TempResultsJoined_NoNA_NoMultimapped$FoldChange_susceptible.toward), NamesOfTstatColumns = list(TempResultsJoined_NoNA_NoMultimapped$Tstat_resistant.to, TempResultsJoined_NoNA_NoMultimapped$Tstat_susceptible.toward ))
+
+str(DEResults_GSE81672)
