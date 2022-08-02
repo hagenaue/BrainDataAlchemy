@@ -239,8 +239,12 @@ print(length(grep('\\|', TempResultsJoined$Gene_Symbol)))
 #I only want the subset of data which contains rows that do not contain a Gene Symbol of ""
 TempResultsJoined_NoNA<-TempResultsJoined[(TempResultsJoined$Gene_Symbol==""|TempResultsJoined$Gene_Symbol=="null")==FALSE,]
 
+if(length(grep('\\|', TempResultsJoined_NoNA$Gene_Symbol))==0){
+  TempResultsJoined_NoNA_NoMultimapped<<-TempResultsJoined_NoNA
+}else{
 #I only want rows annotated with a single Gene Symbol (no pipe):
 TempResultsJoined_NoNA_NoMultimapped<<-TempResultsJoined_NoNA[-(grep('\\|', TempResultsJoined_NoNA$Gene_Symbol)),]
+}
 
 print("# of rows with good annotation")
 print(nrow(TempResultsJoined_NoNA_NoMultimapped))
