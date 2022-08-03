@@ -77,6 +77,35 @@ cbind(colnames(MetaAnalysis_FoldChanges)[-1], Dissection, TypeOfStress)
 # [10,] "GSE81672_StressSusceptible_vs_Ctrl"  "1"        "2"         
 # [11,] "GSE84183_CMS_vs_Ctrl"                "2"        "1"  
 
+#Example of numeric predictors:
+
+DurationOfSleepDep<-c(12,6,5,3,6,6,10,6,18)
+
+#The intercept will be artificially set at 0 for this variable, which can make interpreting results confusing.
+#So sometimes people subtract the "center" of the variable to make so that your values span the y-axis
+
+#center of your data:
+mean(DurationOfSleepDep)
+#[1] 8
+
+DurationOfSleepDep_Centered<-DurationOfSleepDep-8
+
+DurationOfSleepDep_Centered
+#[1]  4 -2 -3 -5 -2 -2  2 -2 10
+#So all values that were less than 8 are negative, all values that were more than 8 are positive
+
+DurationOfRecovery<-c(0,1,4,0,0,6,12,0,2)
+
+mean(DurationOfRecovery)
+#[1] 2.777778
+
+#I might round just to make this more interpretable
+
+DurationOfRecovery_Centered<-DurationOfRecovery-3
+
+DurationOfRecovery_Centered
+#[1] -3 -2  1 -3 -3  3  9 -3 -1
+
 #####################
 
 #Adapting the Meta-Analysis code to handle additional predictors:
@@ -195,6 +224,52 @@ CutOffForNAs=5
   print("Bottom of metaOutput")
   print(tail(metaOutput))
   
-
-
+  
+  #################################
+  
+  
+  #FDR correction:
+  
+  #For main effect (column 3)
+  
+  tempPvalAdjMeta<-mt.rawp2adjp(metaOutput[,3], proc=c("BH"))
+  
+  metaPvalAdj<-tempPvalAdjMeta$adjp[order(tempPvalAdjMeta$index),]
+  
+  metaOutputFDR<-cbind(metaOutput, metaPvalAdj[,2])
+  
+  colnames(metaOutputFDR)[17]<-"Main_FDR"
+  
+ #For predictor 1 (column4)
+  
+  tempPvalAdjMeta<-mt.rawp2adjp(metaOutput[,4], proc=c("BH"))
+  
+  metaPvalAdj<-tempPvalAdjMeta$adjp[order(tempPvalAdjMeta$index),]
+  
+  metaOutputFDR<-cbind(metaOutput, metaPvalAdj[,2])
+  
+  colnames(metaOutputFDR)[18]<-"Predictor1_FDR"
+  
+  #For predictor 2 (column5)
+  
+  tempPvalAdjMeta<-mt.rawp2adjp(metaOutput[,5], proc=c("BH"))
+  
+  metaPvalAdj<-tempPvalAdjMeta$adjp[order(tempPvalAdjMeta$index),]
+  
+  metaOutputFDR<-cbind(metaOutput, metaPvalAdj[,2])
+  
+  colnames(metaOutputFDR)[19]<-"Predictor1_FDR"
+  
+  
+  print("metaOutputFDR:")
+  print(str(metaOutputFDR))
+  
+  write.csv(metaOutputFDR, "metaOutputFDR.csv")
+  
+  #a version of the output in order by p-value for the main effect:
+  metaOutputFDR_OrderbyPval<-metaOutputFDR[order(metaOutputFDR[,3]),]
+  
+  #Let's write out a version of the output in order by p-value:
+  write.csv(metaOutputFDR_OrderbyPval, "metaOutputFDR_orderedByPval_wHDRFData.csv")
+  
 
