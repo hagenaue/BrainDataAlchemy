@@ -228,11 +228,19 @@ CutOffForNAs=5
   #################################
   
   
+colnames(metaOutput)
+  # [1] "Main_Log2FC_estimate"       "Predictor1_Log2FC_estimate" "Predictor2_Log2FC_estimate"
+  # [4] "Main_SE"                    "Predictor1_SE"              "Predictor2_SE"             
+  # [7] "Main_pval"                  "Predictor1_pval"            "Predictor2_pval"           
+  # [10] "Main_CI_lb"                 "Predictor1_CI_lb"           "Predictor2_CI_lb"          
+  # [13] "Main_CI_ub"                 "Predictor1_CI_ub"           "Predictor2_CI_ub"          
+  # [16] "Number_Of_Comparisons"    
+  
   #FDR correction:
   
   #For main effect (column 3)
   
-  tempPvalAdjMeta<-mt.rawp2adjp(metaOutput[,3], proc=c("BH"))
+  tempPvalAdjMeta<-mt.rawp2adjp(metaOutput[,7], proc=c("BH"))
   
   metaPvalAdj<-tempPvalAdjMeta$adjp[order(tempPvalAdjMeta$index),]
   
@@ -242,7 +250,7 @@ CutOffForNAs=5
   
  #For predictor 1 (column4)
   
-  tempPvalAdjMeta<-mt.rawp2adjp(metaOutput[,4], proc=c("BH"))
+  tempPvalAdjMeta<-mt.rawp2adjp(metaOutput[,8], proc=c("BH"))
   
   metaPvalAdj<-tempPvalAdjMeta$adjp[order(tempPvalAdjMeta$index),]
   
@@ -252,13 +260,13 @@ CutOffForNAs=5
   
   #For predictor 2 (column5)
   
-  tempPvalAdjMeta<-mt.rawp2adjp(metaOutput[,5], proc=c("BH"))
+  tempPvalAdjMeta<-mt.rawp2adjp(metaOutput[,9], proc=c("BH"))
   
   metaPvalAdj<-tempPvalAdjMeta$adjp[order(tempPvalAdjMeta$index),]
   
   metaOutputFDR<-cbind(metaOutputFDR, metaPvalAdj[,2])
   
-  colnames(metaOutputFDR)[19]<-"Predictor2_FDR"
+  colnames(metaOutputFDR)[19]<-"Predictor1_FDR"
   
   
   print("metaOutputFDR:")
