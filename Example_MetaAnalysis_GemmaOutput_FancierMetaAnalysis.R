@@ -246,7 +246,7 @@ CutOffForNAs=5
   
   metaPvalAdj<-tempPvalAdjMeta$adjp[order(tempPvalAdjMeta$index),]
   
-  metaOutputFDR<-cbind(metaOutput, metaPvalAdj[,2])
+  metaOutputFDR<-cbind(metaOutputFDR, metaPvalAdj[,2])
   
   colnames(metaOutputFDR)[18]<-"Predictor1_FDR"
   
@@ -256,9 +256,9 @@ CutOffForNAs=5
   
   metaPvalAdj<-tempPvalAdjMeta$adjp[order(tempPvalAdjMeta$index),]
   
-  metaOutputFDR<-cbind(metaOutput, metaPvalAdj[,2])
+  metaOutputFDR<-cbind(metaOutputFDR, metaPvalAdj[,2])
   
-  colnames(metaOutputFDR)[19]<-"Predictor1_FDR"
+  colnames(metaOutputFDR)[19]<-"Predictor2_FDR"
   
   
   print("metaOutputFDR:")
