@@ -275,9 +275,11 @@ colnames(metaOutput)
   write.csv(metaOutputFDR, "metaOutputFDR.csv")
   
   #a version of the output in order by p-value for the main effect:
-  metaOutputFDR_OrderbyPval<-metaOutputFDR[order(metaOutputFDR[,3]),]
+  metaOutputFDR_OrderbyPval<-metaOutputFDR[order(metaOutputFDR[,7]),]
   
   #Let's write out a version of the output in order by p-value:
   write.csv(metaOutputFDR_OrderbyPval, "metaOutputFDR_orderedByPval_wHDRFData.csv")
+  
+
   
 
