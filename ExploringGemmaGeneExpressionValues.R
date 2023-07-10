@@ -34,6 +34,16 @@ str(GSE27532_Expression)
 # - attr(*, ".internal.selfref")=<externalptr> 
 #   - attr(*, "call")= chr "https://gemma.msl.ubc.ca/rest/v2/datasets/GSE27532/data?filter=false"
 
+
+#Looking at data from the first row:
+GSE27532_Expression[1,]
+
+#looking at data from the top of the second column:
+head(GSE27532_Expression[,2])
+
+#Pulling out the expression data and putting it in matrix form (which is a format that only includes 1 data type)
+GSE27532_Expression_Matrix<-as.matrix(GSE27532_Expression[,-c(1:4)])
+
 #Pulling out the expression data and putting it in matrix form (which is a format that only includes 1 data type)
 GSE27532_Expression_Matrix<-as.matrix(GSE27532_Expression[,-c(1:4)])
 
@@ -46,16 +56,59 @@ str(GSE27532_Expression_Matrix)
 #Now I have a matrix of all numeric expression
 #What are the range of values in this matrix?
 
-summary(GSE27532_Expression_Matrix)
+#Here is a way to view a histogram of the log2 expression values for the entire sample: 
+hist(GSE27532_Expression_Matrix)
 
 #This shows a histogram of all of the gene expression values in the dataset
 #For Log2 expression values from microarray, these values will tend to range between 4-14
 #In the original units (normalized fluorescent hybridization signal), that would be a minimum around 2^4:
-2^4
-#[1] 16
+2^6
+#[1] 64
 #... and a maximum around 2^14
 2^14
 #[1] 16384
+
+#If we want to remove the log2 transformation from the entire matrix:
+GSE27532_Expression_Matrix_Untransformed<-2^GSE27532_Expression_Matrix
+str(GSE27532_Expression_Matrix_Untransformed)
+hist(GSE27532_Expression_Matrix_Untransformed)
+
+#We use log2 transformation because gene expression data has much greater variability amongst highly expressed genes than low expressed genes
+#This heteroskedasticity is incompatible with most traditional statistics (t-tests, ANOVA, regression)
+
+#Here is what the heteroskedasticity looks like in the untransformed data:
+
+#Calculating the average value for each gene (row)
+GSE27532_Expression_Matrix_Untransformed_Means<-apply(GSE27532_Expression_Matrix_Untransformed, 1, mean)
+head(GSE27532_Expression_Matrix_Untransformed_Means)
+
+#Calculating the standard deviation for each gene (row)
+GSE27532_Expression_Matrix_Untransformed_SDs<-apply(GSE27532_Expression_Matrix_Untransformed, 1, sd)
+head(GSE27532_Expression_Matrix_Untransformed_SDs)
+
+#When you plot the standard deviation for each gene vs. the average value for each gene in the untransformed data there is a clear positive relationship.
+#i.e., variability increases as average value increases
+plot(GSE27532_Expression_Matrix_Untransformed_SDs~GSE27532_Expression_Matrix_Untransformed_Means)
+
+#You can do the same thing to the log2 transformed data (from Gemma)
+
+#Calculate the average value for each gene (row):
+GSE27532_Expression_Matrix_Means<-apply(GSE27532_Expression_Matrix, 1, mean)
+head(GSE27532_Expression_Matrix_Means)
+
+#Calculating the standard deviation for each gene (row)
+GSE27532_Expression_Matrix_SDs<-apply(GSE27532_Expression_Matrix, 1, sd)
+head(GSE27532_Expression_Matrix_SDs)
+
+#Now there isn't a clear relationship between standard deviation for each gene and average value for each gene:
+plot(GSE27532_Expression_Matrix_SDs~GSE27532_Expression_Matrix_Means)
+#So the heteroskedasticity problem has been removed (or at least reduced...) by the log2 transformation.
+
+#So why log2 transformation instead of natural log (ln), or log4, or log10? All of these transformations also reduce heteroskedasticity.
+#The units following log2 transformation have an intuitive interpretation 
+# 1 unit is a doubling and -1 unit is a halving of the original quantity
+
+summary(GSE27532_Expression_Matrix)
 
 #For Log2 expression values from RNA-Seq, these values will tend to range between 0-14.
 #In non-log2 units, that would be a range of...
@@ -73,8 +126,6 @@ https://www.reneshbedre.com/blog/expression_units.html
 #TPM also corrects for transcript length and sequencing depth
 #Gemma uses... (I just e-mailed to ask - my guess is cpm)
   
-#Here is a way to view a histogram of the log2 expression values for the entire sample: 
-hist(GSE27532_Expression_Matrix)
 
 #This shows an overview of the distribution of log2 expression values for each sample (column):
 summary(GSE27532_Expression_Matrix)
