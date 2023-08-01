@@ -156,12 +156,18 @@ tail(metaOutput)
 #The following code applies two different types of multiple-comparison corrections to the raw p-values (Benjamini-Hochberg and Benjamini-Yekutieli) 
 #Meta-analysis output with adjusted p-values is then outputted along with effect size information.
 
+#We can add some additional gene annotation at this point too:
+HOM_MouseVsRat <- read.csv("HOM_MouseVsRat.csv", header = TRUE, row.names = 1)
+HOM_MouseVsRat$Mouse_EntrezGene.ID <- as.character(HOM_MouseVsRat$Mouse_EntrezGene.ID)
+HOM_MouseVsRat$Rat_EntrezGene.ID <- as.character(HOM_MouseVsRat$Rat_EntrezGene.ID)
+
+                                            
 #9) Correct the meta-analysis output to take into account the fact that we are running the statistical calculations many times and therefore have a heightened risk of false discovery (false discovery rate correction) 
 
 library(multtest)
 
 #Let's functionalize it!
-FalseDiscoveryCorrection<-function(metaOutput, HOM_MouseVsRat){
+FalseDiscoveryCorrection<-function(metaOutput, HOM_MouseVsRat, MetaAnalysis_Annotation){
   
   tempPvalAdjMeta<-mt.rawp2adjp(metaOutput[,3], proc=c("BH"))
   
