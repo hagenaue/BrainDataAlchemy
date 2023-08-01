@@ -28,7 +28,10 @@ table(MetaAnalysis_FoldChanges_NAsPerRow)
 #I set this conservatively, because there are so few studies in this meta-analysis.
 #2 NA is too many
 
+#Installing and loading relevant code packages:
+install.packages("metafor")
 library(metafor)
+library(plyr)                                          
 
 RunBasicMetaAnalysis<-function(NumberOfComparisons, CutOffForNAs, MetaAnalysis_FoldChanges, MetaAnalysis_SV){
   
@@ -164,6 +167,10 @@ HOM_MouseVsRat$Rat_EntrezGene.ID <- as.character(HOM_MouseVsRat$Rat_EntrezGene.I
                                             
 #9) Correct the meta-analysis output to take into account the fact that we are running the statistical calculations many times and therefore have a heightened risk of false discovery (false discovery rate correction) 
 
+#Installing and loading relevant code packages
+if (!require("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("multtest")                                 
 library(multtest)
 
 #Let's functionalize it!
@@ -301,6 +308,10 @@ metaOutputFDR_OrderbyPval$Mouse_EntrezGene.ID[c(1:17)]
 hist(metaOutputFDR[,1], breaks=40)
 #Range is mostly -1 to 1, but there are a few with Log2FC as big as -3-3
 
+#Note - this function currently uses Mouse Entrez ID (NCBI ID) as it's input
+#It needs to be formatted as a character (not an integer) to work
+#I will need to make a version of this later that accepts rat Entrez ID
+                                            
 MakeForestPlots<-function(EntrezIDAsCharacter){
   
   pdf(paste("ForestPlot_", EntrezIDAsCharacter, ".pdf", sep=""), height=5, width=8)
