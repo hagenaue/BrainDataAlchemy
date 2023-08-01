@@ -106,8 +106,9 @@ row.names(TempResultsJoined_NoNA_NoMultimapped_Tstats)<-TempResultsJoined_NoNA_N
 
 
 #Let's rename our columns to something nicer
+#Note - we later discovered that this name needs to include the dataset identifier (GSEID#) for later joining and plotting purposes
 
-ComparisonsOfInterest<-c("CuffOperation_vs_Ctrl")
+ComparisonsOfInterest<-c("GSE92718_CuffOperation_vs_Ctrl")
 
 colnames(TempResultsJoined_NoNA_NoMultimapped_FoldChanges)<-ComparisonsOfInterest
 colnames(TempResultsJoined_NoNA_NoMultimapped_Tstats)<-ComparisonsOfInterest
@@ -122,8 +123,6 @@ colnames(TempResultsJoined_NoNA_NoMultimapped_Tstats)<-ComparisonsOfInterest
 #Reading in the Extracting Results function:
 
 ExtractingDEResults<-function(GSE_ID, TempResultsJoined_NoNA_NoMultimapped_FoldChanges, TempResultsJoined_NoNA_NoMultimapped_Tstats){
-  
-  #Let's rename our columns to something nicer
   
   #We calculate the standard error by dividing the log2FC by the tstat
   TempResultsJoined_NoNA_NoMultimapped_SE<-TempResultsJoined_NoNA_NoMultimapped_FoldChanges/TempResultsJoined_NoNA_NoMultimapped_Tstats
@@ -155,11 +154,11 @@ ExtractingDEResults(GSE_ID="GSE92718", TempResultsJoined_NoNA_NoMultimapped_Fold
 # num [1:16862, 1] 0.1655 0.0943 0.1069 0.1443 0.0382 ...
 # - attr(*, "dimnames")=List of 2
 # ..$ : chr [1:16862] "13654" "215418" "13656" "19252" ...
-# ..$ : chr "CuffOperation_vs_Ctrl"
+# ..$ : chr "GSE92718_CuffOperation_vs_Ctrl"
 # num [1:16862, 1] 0.02739 0.00889 0.01142 0.02083 0.00146 ...
 # - attr(*, "dimnames")=List of 2
 # ..$ : chr [1:16862] "13654" "215418" "13656" "19252" ...
-# ..$ : chr "CuffOperation_vs_Ctrl"
+# ..$ : chr "GSE92718_CuffOperation_vs_Ctrl"
 # [1] "Output: Named DEResults_GSE92718"
 
 str(DEResults_GSE92718)
@@ -167,19 +166,19 @@ str(DEResults_GSE92718)
 # $ Log2FC: num [1:16862, 1] 1.386 0.668 0.72 0.974 0.245 ...
 # ..- attr(*, "dimnames")=List of 2
 # .. ..$ : chr [1:16862] "13654" "215418" "13656" "19252" ...
-# .. ..$ : chr "CuffOperation_vs_Ctrl"
+# .. ..$ : chr "GSE92718_CuffOperation_vs_Ctrl"
 # $ Tstat : num [1:16862, 1] 8.37 7.09 6.74 6.75 6.41 ...
 # ..- attr(*, "dimnames")=List of 2
 # .. ..$ : chr [1:16862] "13654" "215418" "13656" "19252" ...
-# .. ..$ : chr "CuffOperation_vs_Ctrl"
+# .. ..$ : chr "GSE92718_CuffOperation_vs_Ctrl"
 # $ SE    : num [1:16862, 1] 0.1655 0.0943 0.1069 0.1443 0.0382 ...
 # ..- attr(*, "dimnames")=List of 2
 # .. ..$ : chr [1:16862] "13654" "215418" "13656" "19252" ...
-# .. ..$ : chr "CuffOperation_vs_Ctrl"
+# .. ..$ : chr "GSE92718_CuffOperation_vs_Ctrl"
 # $ SV    : num [1:16862, 1] 0.02739 0.00889 0.01142 0.02083 0.00146 ...
 # ..- attr(*, "dimnames")=List of 2
 # .. ..$ : chr [1:16862] "13654" "215418" "13656" "19252" ...
-# .. ..$ : chr "CuffOperation_vs_Ctrl"
+# .. ..$ : chr "GSE92718_CuffOperation_vs_Ctrl"
 
 #Sanity Check:
 
@@ -267,8 +266,9 @@ str(TempResultsJoined_NoNA_NoMultimapped_Tstats)
 row.names(TempResultsJoined_NoNA_NoMultimapped_Tstats)<-TempResultsJoined_NoNA_NoMultimapped$NCBIid
 
 #Let's rename our columns to something nicer describing the effect of interest:
+#Note - we later discovered that this name needs to include the dataset identifier (GSEID#) for later joining and plotting purposes
 
-ComparisonsOfInterest<-c("StressEffects_InteractionWSex")
+ComparisonsOfInterest<-c("GSE85136_StressEffects_InteractionWSex")
 
 colnames(TempResultsJoined_NoNA_NoMultimapped_FoldChanges)<-ComparisonsOfInterest
 colnames(TempResultsJoined_NoNA_NoMultimapped_Tstats)<-ComparisonsOfInterest
