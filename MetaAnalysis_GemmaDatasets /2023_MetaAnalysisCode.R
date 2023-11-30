@@ -218,7 +218,7 @@ FalseDiscoveryCorrection<-function(metaOutput, HOM_MouseVsRat, MetaAnalysis_Anno
 
 #Example usage:
 
-FalseDiscoveryCorrection(metaOutput, HOM_MouseVsRat)
+FalseDiscoveryCorrection(metaOutput, HOM_MouseVsRat, MetaAnalysis_Annotation)
 # [1] "metaOutputFDR:"
 # num [1:15866, 1:7] 0.012 0.0143 -0.1497 0.157 1.3608 ...
 # - attr(*, "dimnames")=List of 2
