@@ -26,6 +26,11 @@
 
 ####################
 
+#Most of the rest of this code is irrelevant if using an R project
+# so we'll just skip it and jump to making a project file
+
+####################
+
 #1. Tell R where you want your home directory to be (i.e., where your R project folders will be located in general - not just this project):
 
 #The tilde is shorthand for your current home directory, as defined in R-Studio. You can see the default using this code: 
