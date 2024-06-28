@@ -186,10 +186,16 @@ MyResults_Annotated<-cbind.data.frame(MyResults,
 
 #Let's add some empty columns for taking inclusion/exclusion notes too
 
+ManipulationUnrelatedToTopic<-vector(mode="character", length=nrow(MyResults))
+IncorrectDevelopmentalStage<-vector(mode="character", length=nrow(MyResults))
+NotBulkDissection_ParticularCellTypeOrSubRegion<-vector(mode="character", length=nrow(MyResults))
+NotFullTranscriptome_ChipSeq_TRAP_miRNA<-vector(mode="character", length=nrow(MyResults))
+MetadataIssues_MissingInfo_NoPub_Retracted_Duplicated<-vector(mode="character", length=nrow(MyResults))
+
 Excluded<-vector(mode="character", length=nrow(MyResults))
 WhyExcluded<-vector(mode="character", length=nrow(MyResults))
 
-MyResults_Annotated<-cbind.data.frame(MyResults_Annotated, Excluded, WhyExcluded)
+MyResults_Annotated<-cbind.data.frame(MyResults_Annotated, ManipulationUnrelatedToTopic, IncorrectDevelopmentalStage, NotBulkDissection_ParticularCellTypeOrSubRegion, NotFullTranscriptome_ChipSeq_TRAP_miRNA, MetadataIssues_MissingInfo_NoPub_Retracted_Duplicated, Excluded, WhyExcluded)
 
 #And then write out the results so that we can snoop through them in a spreadsheet program like Excel:
 write.csv(MyResults_Annotated, "MyResults_Annotated.csv")
