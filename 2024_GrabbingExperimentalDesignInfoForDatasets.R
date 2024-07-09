@@ -5,7 +5,7 @@
 
 #We will need to review the design of these differential expression analyses for two reasons:
 
-####################
+##############################
 
 #First Goal:
 
@@ -22,12 +22,13 @@
 #ExperimentIDs<-c("GSE135306", "GSE81672", "GSE180465", "GSE179667", "GSE146358", "GSE128255", "GSE187418")
 
 #... or you can copy them into a spreadsheet as a single column and save them as a .csv file (preferably in the same order as your inclusion/exclusion spreadsheet, without a column name (header)) and read them in:
-ExperimentIDs<-read.csv("MyExperimentIDs.csv", stringsAsFactors = FALSE)
+ExperimentIDs<-read.csv("ExampleExperimentIDs.csv", header=FALSE, stringsAsFactors = FALSE)
 str(ExperimentIDs)
 #This is a dataframe.
 #... but the following code needs a vector, so let's grab the first (and only) column
 #And make it a vector
 ExperimentIDs<-ExperimentIDs[,1]
+str(ExperimentIDs)
 
 #Next, we'll make some empty vectors to store the information that we are going to collect about each dataset:
 FactorInfo<-vector(mode="character", length=length(ExperimentIDs))
@@ -44,6 +45,8 @@ for(i in c(1:length(ExperimentIDs))){
   #For each dataset, we will use Gemma's API to access the experimental design info:
   Design<-gemma.R::get_dataset_differential_expression_analyses(ExperimentIDs[i])
   
+  if(nrow(Design)>0){
+    
   #For the dataset, we'll grab the vector of factor categories included in the design
   #And collapse it to a single entry in our data frame.
   FactorInfoDF[i,2]<-paste(Design$factor.category, collapse="; ")
@@ -79,6 +82,9 @@ for(i in c(1:length(ExperimentIDs))){
   #And clean up our workspace before we start the loop again
   rm(Design, ExperimentalFactorVector, BaselineFactorVector)
   
+  }else{
+    rm(Design)
+  }
 }
 
 #You can write out this object and use it to help screen datasets
@@ -126,6 +132,7 @@ for(i in c(1:length(ExperimentIDs))){
   #For each dataset, we will use Gemma's API to access the experimental design info:
   Design<-gemma.R::get_dataset_differential_expression_analyses(ExperimentIDs[i])
 
+  if(nrow(Design)>0){
 #Next, we'll make some empty vectors to store the experimental factor and baseline factor information for each result id for the dataset:
 ExperimentalFactors<-vector(mode="character", length(Design$result.ID))
 BaselineFactors<-vector(mode="character", length(Design$result.ID))
@@ -175,7 +182,11 @@ ResultSets_toScreen<-rbind.data.frame(ResultSets_toScreen, ResultSets_ForExperim
 
 #Then clean up our space before looping to the next dataset:
 rm(ResultSets_ForExperiment, Design, ExperimentalFactors, BaselineFactors, SubsetBy)
-
+  
+  }else{
+  rm(Design)
+}
+  
 }
 
 #When we're done, we'll want to remove the initial (empty) row in our data.frame:
