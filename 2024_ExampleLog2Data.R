@@ -35,11 +35,11 @@ dev.off()
 getwd()
 
 #We can also pull out numeric values summarizing the distribution, e.g.:
-min(as.matrix(Expression[,-c(1:4)]))
+min(as.matrix(Expression[,-c(1:4)]), na.rm=TRUE)
 #[1] -5.8601
-median(as.matrix(Expression[,-c(1:4)]))
+median(as.matrix(Expression[,-c(1:4)]), na.rm=TRUE)
 #[1] -2.1651
-max(as.matrix(Expression[,-c(1:4)]))
+max(as.matrix(Expression[,-c(1:4)]), na.rm=TRUE)
 #[1] 12.312
 #Or to get more of an overview:
 summary(as.matrix(Expression[,-c(1:4)]))
@@ -57,11 +57,11 @@ Expression<-gemma.R::get_dataset_processed_expression("GSE84183")
 str(Expression)
 #Classes ‘data.table’ and 'data.frame':	59305 obs. of  68 variables:
 hist(as.matrix(Expression[,-c(1:4)]))
-min(as.matrix(Expression[,-c(1:4)]))
+min(as.matrix(Expression[,-c(1:4)]), na.rm=TRUE)
 #[1] 2.2011
-median(as.matrix(Expression[,-c(1:4)]))
+median(as.matrix(Expression[,-c(1:4)]), na.rm=TRUE)
 #[1] 2.2975
-max(as.matrix(Expression[,-c(1:4)]))
+max(as.matrix(Expression[,-c(1:4)]), na.rm=TRUE)
 #[1] 4.2235
 #The range is between 2 and 4.5
 #Why is that?
