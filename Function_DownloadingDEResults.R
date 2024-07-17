@@ -25,14 +25,13 @@ DownloadingDEResults<-function(ResultSet_contrasts){
   # # calculated due to a variety of factors. here we remove the empty differentials
   missing_contrasts <- differentials %>% sapply(nrow) %>% {.==0}
   #[1] FALSE FALSE FALSE
-  differentials <- differentials[!missing_contrasts]
-  UniqueResultSetIDs<-UniqueResultSetIDs[!missing_contrasts]
+  differentials <<- differentials[!missing_contrasts]
+  UniqueResultSetIDs<<-UniqueResultSetIDs[!missing_contrasts]
   
   print("These are the result sets that had differential expression results:")
   print(UniqueResultSetIDs)
   
   print("Your differential expression results for each of your result sets are stored in the object named differentials. This object is structured as a list of data frames. Each element in the list represetns a result set, with the data frame containing the differential expression results")
-  
   
   #Within any particular Result Set, there are likely to be some contrasts that we want and others that we don't want
   #For example, a result set might contain a variety of stress interventions
@@ -45,7 +44,7 @@ DownloadingDEResults<-function(ResultSet_contrasts){
   #Which will be these columns within the listed dataframes of differential expression results:
   
   print("These are the columns for the effect sizes for our statistical contrasts of interest (Log(2) Fold Changes")
-  Contrasts_Log2FC<-paste("contrast_", ResultSet_contrasts$ContrastIDs, "_log2fc", sep="")
+  Contrasts_Log2FC<<-paste("contrast_", ResultSet_contrasts$ContrastIDs, "_log2fc", sep="")
   
   print(Contrasts_Log2FC)
   #[1] "contrast_151618_log2fc" "contrast_151617_log2fc" "contrast_151619_log2fc"
@@ -53,7 +52,7 @@ DownloadingDEResults<-function(ResultSet_contrasts){
   
   print("these are the columns for the T-statistics for our statistical contrasts of interest - we will use that information to derive the sampling variances")
   
-  Contrasts_Tstat<-paste("contrast_", ResultSet_contrasts$ContrastIDs, "_tstat", sep="")
+  Contrasts_Tstat<<-paste("contrast_", ResultSet_contrasts$ContrastIDs, "_tstat", sep="")
   
   print(Contrasts_Tstat)
   # [1] "contrast_151618_tstat" "contrast_151617_tstat" "contrast_151619_tstat"

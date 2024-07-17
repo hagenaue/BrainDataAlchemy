@@ -28,12 +28,29 @@ library(dplyr)
 
 #################
 
-#Set your working directory
+#Set your working directory - 
+#A working directory was already defined when you created your R project
+#If not:
 
 #Sample code:
-setwd("/Users/hagenaue/Dropbox (University of Michigan)/LaptopBackup_20221123/Teaching/BrainDataAlchemy/Summer_2024/Summer2024_Pipeline/Example_Analysis/QueryResults")
+setwd("/Users/hagenaue/Documents/BrainDataAlchemy_2024_Example")
+
+#The functions and files that you will need to should be added to your working directory:
 
 list.files()
+# [1] "2024_Example_Code_forGemmaSearch_Part1.R"        
+# [2] "2024_Example_GemmaDEResults_ImportPipeline.R"    
+# [3] "2024_ExampleCode_SettingUpDirectory.R"           
+# [4] "BrainDataAlchemy_2024_Example.Rproj"             
+# [5] "Function_CollapsingDEResults_OneResultPerGene.R" 
+# [6] "Function_DownloadingDEResults.R"                 
+# [7] "Function_ExtractingDEResultsForContrasts.R"      
+# [8] "Function_FilteringDEResults_GoodAnnotation.R"    
+# [9] "Function_GettingResultSetInfoForDatasets.R"      
+# [10] "Function_SavingGemmaDEResults_forEachResultSet.R"
+# [11] "MyDatasets_Screened.csv"                         
+# [12] "ResultSets_Screened.csv"                         
+# [13] "ResultSets_toScreen.csv"  
 
 #Read in your final chosen dataset spreadsheet:
 
@@ -125,15 +142,107 @@ source("Function_DownloadingDEResults.R")
 #example usage:
 DownloadingDEResults(ResultSet_contrasts)
 
+# [1] "These are the result sets that you identified as being of interest"
+# [1] 553805 570552 556647
+# List of 3
+# $ :Classes ‘data.table’ and 'data.frame':	21693 obs. of  19 variables:
+#   ..$ Probe                      : int [1:21693] 20344 20558 110454 20339 17067 68774 21946 21366 76905 16190 ...
+# ..$ NCBIid                     : int [1:21693] 20344 20558 110454 20339 17067 68774 21946 21366 76905 16190 ...
+# ..$ GeneSymbol                 : chr [1:21693] "Selp" "Slfn4" "Ly6a" "Sele" ...
+# ..$ GeneName                   : chr [1:21693] "selectin, platelet" "schlafen 4" "lymphocyte antigen 6 family member A" "selectin, endothelial cell" ...
+# ..$ pvalue                     : num [1:21693] 1.70e-10 9.11e-09 5.38e-08 7.73e-08 1.00e-07 ...
+# ..$ corrected_pvalue           : num [1:21693] 3.69e-06 9.88e-05 4.00e-04 4.00e-04 4.00e-04 ...
+# ..$ rank                       : num [1:21693] 4.61e-05 9.22e-05 1.00e-04 2.00e-04 2.00e-04 ...
+# ..$ contrast_151617_coefficient: num [1:21693] 3.102 3.27 0.763 2.868 0.513 ...
+# ..$ contrast_151617_log2fc     : num [1:21693] 3.102 3.27 0.763 2.868 0.513 ...
+# ..$ contrast_151617_tstat      : num [1:21693] 2.97 3.62 3.86 2.31 4.17 ...
+# ..$ contrast_151617_pvalue     : num [1:21693] 0.0077 0.0017 0.001 0.0318 0.0005 ...
+# ..$ contrast_151618_coefficient: num [1:21693] 7.01 5.21 1.35 5.86 0.82 ...
+# ..$ contrast_151618_log2fc     : num [1:21693] 7.01 5.21 1.35 5.86 0.82 ...
+# ..$ contrast_151618_tstat      : num [1:21693] 7.81 6.14 7.02 5.28 6.78 ...
+# ..$ contrast_151618_pvalue     : num [1:21693] 1.86e-07 5.64e-06 9.01e-07 3.78e-05 1.47e-06 ...
+# ..$ contrast_151619_coefficient: num [1:21693] 1.223 -0.303 -0.243 0.118 -0.214 ...
+# ..$ contrast_151619_log2fc     : num [1:21693] 1.223 -0.303 -0.243 0.118 -0.214 ...
+# ..$ contrast_151619_tstat      : num [1:21693] 1.0192 -0.2593 -1.1221 0.0785 -1.6535 ...
+# ..$ contrast_151619_pvalue     : num [1:21693] 0.32 0.798 0.275 0.938 0.114 ...
+# ..- attr(*, ".internal.selfref")=<externalptr> 
+#   ..- attr(*, "call")= chr "https://gemma.msl.ubc.ca/rest/v2/resultSets/553805"
+# ..- attr(*, "env")=<environment: 0x7f897aec2838> 
+#   $ :Classes ‘data.table’ and 'data.frame':	45100 obs. of  11 variables:
+#   ..$ Probe                      : chr [1:45100] "1426114_PM_at" "1452267_PM_at" "1441388_PM_at" "1436221_PM_at" ...
+# ..$ NCBIid                     : chr [1:45100] "" "224613" "" "100039795" ...
+# ..$ GeneSymbol                 : chr [1:45100] "" "Flywch1" "" "Ildr2" ...
+# ..$ GeneName                   : chr [1:45100] "" "FLYWCH-type zinc finger 1" "" "immunoglobulin-like domain containing receptor 2" ...
+# ..$ pvalue                     : num [1:45100] 3.74e-09 1.57e-08 1.32e-08 8.87e-09 2.37e-08 ...
+# ..$ corrected_pvalue           : num [1:45100] 2e-04 2e-04 2e-04 2e-04 2e-04 3e-04 3e-04 3e-04 4e-04 5e-04 ...
+# ..$ rank                       : num [1:45100] 2.22e-05 8.87e-05 6.65e-05 4.44e-05 1.00e-04 ...
+# ..$ contrast_186753_coefficient: num [1:45100] 0.1587 0.0967 -0.5049 0.7694 0.1039 ...
+# ..$ contrast_186753_log2fc     : num [1:45100] 0.1587 0.0967 -0.5049 0.7694 0.1039 ...
+# ..$ contrast_186753_tstat      : num [1:45100] 1.65 2.28 -5.4 10.4 2.11 ...
+# ..$ contrast_186753_pvalue     : num [1:45100] 1.20e-01 3.83e-02 8.18e-05 3.93e-08 5.26e-02 ...
+# ..- attr(*, ".internal.selfref")=<externalptr> 
+#   ..- attr(*, "call")= chr "https://gemma.msl.ubc.ca/rest/v2/resultSets/570552"
+# ..- attr(*, "env")=<environment: 0x7f897ab59f78> 
+#   $ :Classes ‘data.table’ and 'data.frame':	18964 obs. of  11 variables:
+#   ..$ Probe                      : int [1:18964] 497918 303604 501110 498386 299052 25636 65166 102548697 100364561 24183 ...
+# ..$ NCBIid                     : int [1:18964] 497918 303604 501110 498386 299052 25636 65166 102548697 100364561 24183 ...
+# ..$ GeneSymbol                 : chr [1:18964] "Smcr8" "Map3k3" "Gsta6" "Cc2d2a" ...
+# ..$ GeneName                   : chr [1:18964] "SMCR8-C9orf72 complex subunit" "mitogen activated protein kinase kinase kinase 3" "glutathione S-transferase alpha 6" "coiled-coil and C2 domain containing 2A" ...
+# ..$ pvalue                     : num [1:18964] 0.869 0.885 0.23 0.597 0.518 ...
+# ..$ corrected_pvalue           : num [1:18964] 1 1 1 1 1 ...
+# ..$ rank                       : num [1:18964] 0.855 0.875 0.191 0.569 0.486 ...
+# ..$ contrast_204289_coefficient: num [1:18964] 0.0982 -0.0239 -0.2088 -0.1256 -0.3315 ...
+# ..$ contrast_204289_log2fc     : num [1:18964] 0.0982 -0.0239 -0.2088 -0.1256 -0.3315 ...
+# ..$ contrast_204289_tstat      : num [1:18964] 0.167 -0.146 -1.242 -0.538 -0.659 ...
+# ..$ contrast_204289_pvalue     : num [1:18964] 0.869 0.885 0.23 0.597 0.518 ...
+# ..- attr(*, ".internal.selfref")=<externalptr> 
+#   ..- attr(*, "call")= chr "https://gemma.msl.ubc.ca/rest/v2/resultSets/556647"
+# ..- attr(*, "env")=<environment: 0x7f88feede760> 
+#   [1] "These are the result sets that had differential expression results:"
+# [1] 553805 570552 556647
+# [1] "Your differential expression results for each of your result sets are stored in the object named differentials. This object is structured as a list of data frames. Each element in the list represetns a result set, with the data frame containing the differential expression results"
+# [1] "These are the columns for the effect sizes for our statistical contrasts of interest (Log(2) Fold Changes"
+# [1] "contrast_151618_log2fc" "contrast_151617_log2fc" "contrast_151619_log2fc"
+# [4] "contrast_186753_log2fc" "contrast_204289_log2fc"
+# [1] "these are the columns for the T-statistics for our statistical contrasts of interest - we will use that information to derive the sampling variances"
+# [1] "contrast_151618_tstat" "contrast_151617_tstat" "contrast_151619_tstat"
+# [4] "contrast_186753_tstat" "contrast_204289_tstat"
+
+
+#####
+
 str(differentials)
-#Also seems to work
-#List of 3 data frames
+#List of 3
 
 #Each of those is a result set containing all of the differential expression results for that particular variable. 
 #If the variable has more than one level (e.g., 3 LPS dosages), you will have several statistical contrasts included in the result set differential expression output.
 
 #Here is how you can access and review the differential expression results for a particular result set id:
 str(differentials[1])
+# List of 1
+# $ :Classes ‘data.table’ and 'data.frame':	21693 obs. of  19 variables:
+#   ..$ Probe                      : int [1:21693] 20344 20558 110454 20339 17067 68774 21946 21366 76905 16190 ...
+# ..$ NCBIid                     : int [1:21693] 20344 20558 110454 20339 17067 68774 21946 21366 76905 16190 ...
+# ..$ GeneSymbol                 : chr [1:21693] "Selp" "Slfn4" "Ly6a" "Sele" ...
+# ..$ GeneName                   : chr [1:21693] "selectin, platelet" "schlafen 4" "lymphocyte antigen 6 family member A" "selectin, endothelial cell" ...
+# ..$ pvalue                     : num [1:21693] 1.70e-10 9.11e-09 5.38e-08 7.73e-08 1.00e-07 ...
+# ..$ corrected_pvalue           : num [1:21693] 3.69e-06 9.88e-05 4.00e-04 4.00e-04 4.00e-04 ...
+# ..$ rank                       : num [1:21693] 4.61e-05 9.22e-05 1.00e-04 2.00e-04 2.00e-04 ...
+# ..$ contrast_151617_coefficient: num [1:21693] 3.102 3.27 0.763 2.868 0.513 ...
+# ..$ contrast_151617_log2fc     : num [1:21693] 3.102 3.27 0.763 2.868 0.513 ...
+# ..$ contrast_151617_tstat      : num [1:21693] 2.97 3.62 3.86 2.31 4.17 ...
+# ..$ contrast_151617_pvalue     : num [1:21693] 0.0077 0.0017 0.001 0.0318 0.0005 ...
+# ..$ contrast_151618_coefficient: num [1:21693] 7.01 5.21 1.35 5.86 0.82 ...
+# ..$ contrast_151618_log2fc     : num [1:21693] 7.01 5.21 1.35 5.86 0.82 ...
+# ..$ contrast_151618_tstat      : num [1:21693] 7.81 6.14 7.02 5.28 6.78 ...
+# ..$ contrast_151618_pvalue     : num [1:21693] 1.86e-07 5.64e-06 9.01e-07 3.78e-05 1.47e-06 ...
+# ..$ contrast_151619_coefficient: num [1:21693] 1.223 -0.303 -0.243 0.118 -0.214 ...
+# ..$ contrast_151619_log2fc     : num [1:21693] 1.223 -0.303 -0.243 0.118 -0.214 ...
+# ..$ contrast_151619_tstat      : num [1:21693] 1.0192 -0.2593 -1.1221 0.0785 -1.6535 ...
+# ..$ contrast_151619_pvalue     : num [1:21693] 0.32 0.798 0.275 0.938 0.114 ...
+# ..- attr(*, ".internal.selfref")=<externalptr> 
+#   ..- attr(*, "call")= chr "https://gemma.msl.ubc.ca/rest/v2/resultSets/553805"
+# ..- attr(*, "env")=<environment: 0x7f89a3033660> 
 
 ###############################
 
@@ -141,8 +250,6 @@ str(differentials[1])
 
 #The reason for this is because we will have a hard time replicating our results in the future with just our code
 #Because Gemma updates the annotation on the data every time a new reference genome is released
-
-setwd("/Users/hagenaue/Dropbox (University of Michigan)/LaptopBackup_20221123/Teaching/BrainDataAlchemy/Summer_2024/Summer2024_Pipeline/Example_Analysis/Gemma_DE_Results")
 
 source("Function_SavingGemmaDEResults_forEachResultSet.R")
 
@@ -156,7 +263,7 @@ SavingGemmaDEResults_forEachResultSet(differentials, UniqueResultSetIDs, ResultS
 
 #We need to filter down our differential expression results to just the rows with good gene annotation
 
-DE_Results<-differentials[[i]]
+DE_Results<-differentials[[1]]
 
 str(DE_Results)
 #Classes ‘data.table’ and 'data.frame':	21693 obs. of  19 variables:
@@ -167,7 +274,7 @@ source("Function_FilteringDEResults_GoodAnnotation.R")
 
 #Example of using the function for a dataset:
 
-FilteringDEResults_GoodAnnotation(differentials[[1]])
+FilteringDEResults_GoodAnnotation(DE_Results)
 
 # [1] "# of rows in results"
 # [1] 21693
@@ -186,6 +293,29 @@ FilteringDEResults_GoodAnnotation(differentials[[1]])
 # [1] "Outputted object: DE_Results_GoodAnnotation"
 
 str(DE_Results_GoodAnnotation)
+# Classes ‘data.table’ and 'data.frame':	21614 obs. of  19 variables:
+#   $ Probe                      : int  20344 20558 110454 20339 17067 68774 21946 21366 76905 16190 ...
+# $ NCBIid                     : int  20344 20558 110454 20339 17067 68774 21946 21366 76905 16190 ...
+# $ GeneSymbol                 : chr  "Selp" "Slfn4" "Ly6a" "Sele" ...
+# $ GeneName                   : chr  "selectin, platelet" "schlafen 4" "lymphocyte antigen 6 family member A" "selectin, endothelial cell" ...
+# $ pvalue                     : num  1.70e-10 9.11e-09 5.38e-08 7.73e-08 1.00e-07 ...
+# $ corrected_pvalue           : num  3.69e-06 9.88e-05 4.00e-04 4.00e-04 4.00e-04 ...
+# $ rank                       : num  4.61e-05 9.22e-05 1.00e-04 2.00e-04 2.00e-04 ...
+# $ contrast_151617_coefficient: num  3.102 3.27 0.763 2.868 0.513 ...
+# $ contrast_151617_log2fc     : num  3.102 3.27 0.763 2.868 0.513 ...
+# $ contrast_151617_tstat      : num  2.97 3.62 3.86 2.31 4.17 ...
+# $ contrast_151617_pvalue     : num  0.0077 0.0017 0.001 0.0318 0.0005 ...
+# $ contrast_151618_coefficient: num  7.01 5.21 1.35 5.86 0.82 ...
+# $ contrast_151618_log2fc     : num  7.01 5.21 1.35 5.86 0.82 ...
+# $ contrast_151618_tstat      : num  7.81 6.14 7.02 5.28 6.78 ...
+# $ contrast_151618_pvalue     : num  1.86e-07 5.64e-06 9.01e-07 3.78e-05 1.47e-06 ...
+# $ contrast_151619_coefficient: num  1.223 -0.303 -0.243 0.118 -0.214 ...
+# $ contrast_151619_log2fc     : num  1.223 -0.303 -0.243 0.118 -0.214 ...
+# $ contrast_151619_tstat      : num  1.0192 -0.2593 -1.1221 0.0785 -1.6535 ...
+# $ contrast_151619_pvalue     : num  0.32 0.798 0.275 0.938 0.114 ...
+# - attr(*, ".internal.selfref")=<externalptr> 
+#   - attr(*, "call")= chr "https://gemma.msl.ubc.ca/rest/v2/resultSets/553805"
+# - attr(*, "env")=<environment: 0x7f89998ffea8> 
 
 #################
 
@@ -196,7 +326,27 @@ source("Function_ExtractingDEResultsForContrasts.R")
 #Example usage:
 ExtractingDEResultsForContrasts(DE_Results_GoodAnnotation, Contrasts_Log2FC, Contrasts_Tstat, ResultSet_contrasts)
   
-# [1] "GSE126678_lipopolysaccharide has modifier Acute immune challenge , vehicle; lipopolysaccharide has modifier Acute immune challenge , vehicle"                       
+# [1] "These are all of the columns in the differential expression results for our current result set:"
+# [1] "Probe"                       "NCBIid"                     
+# [3] "GeneSymbol"                  "GeneName"                   
+# [5] "pvalue"                      "corrected_pvalue"           
+# [7] "rank"                        "contrast_151617_coefficient"
+# [9] "contrast_151617_log2fc"      "contrast_151617_tstat"      
+# [11] "contrast_151617_pvalue"      "contrast_151618_coefficient"
+# [13] "contrast_151618_log2fc"      "contrast_151618_tstat"      
+# [15] "contrast_151618_pvalue"      "contrast_151619_coefficient"
+# [17] "contrast_151619_log2fc"      "contrast_151619_tstat"      
+# [19] "contrast_151619_pvalue"     
+# [1] "These are the names of the Log(2) Fold Change Columns for our statistical contrasts of interest within the differential expression results for this particular result set:"
+# [1] "contrast_151617_log2fc" "contrast_151618_log2fc" "contrast_151619_log2fc"
+# [1] "These are the names of the T-statistic Columns for our statistical contrasts of interest within the differential expression results for this particular result set:"
+# [1] "contrast_151617_tstat" "contrast_151618_tstat" "contrast_151619_tstat"
+# [1] "These are the contrast ids for the statistical contrasts of interest within your current result set:"
+# [1] "151617" "151618" "151619"
+# [1] "This is the dataset id for the result set and statistical contrasts:"
+# [1] "GSE126678"
+# [1] "These are the current names for your statistical contrasts of interest - if they are unwieldy, you may want to change them"
+# [1] "GSE126678_lipopolysaccharide has modifier Acute immune challenge , vehicle; lipopolysaccharide has modifier Acute immune challenge , vehicle"                              
 # [2] "GSE126678_lipopolysaccharide has modifier Long-term subchronic immune challenge + acute immune challenge"                                                                  
 # [3] "GSE126678_lipopolysaccharide has modifier long-term subchronic immune challenge , vehicle; lipopolysaccharide has modifier long-term subchronic immune challenge , vehicle"
 
@@ -235,262 +385,5 @@ CollapsingDEResults_OneResultPerGene(GSE_ID, DE_Results_GoodAnnotation, Comparis
 
 #################
 
-FilteringDEResults_GoodAnnotation(differentials[[2]])
-
-# [1] "# of rows in results"
-# [1] 45100
-# [1] "# of rows with missing NCBI annotation:"
-# [1] 13489
-# [1] "# of rows with NA NCBI annotation:"
-# [1] 0
-# [1] "# of rows with missing Gene Symbol annotation:"
-# [1] 13489
-# [1] "# of rows mapped to multiple NCBI_IDs:"
-# [1] 717
-# [1] "# of rows mapped to multiple Gene Symbols:"
-# [1] 717
-# [1] "# of rows with good annotation"
-# [1] 30894
-# [1] "Outputted object: DE_Results_GoodAnnotation"
-
-
-ComparisonsOfInterest
-#[1] "GSE181285_lipopolysaccharide delivered at dose 850 ug/kg"
-
-#That names is super unwieldy. I'm going to rename it:
-ComparisonsOfInterest<-c("GSE181285_LPS_Acute")
-
-
-CollapsingDEResults_OneResultPerGene(GSE_ID, DE_Results_GoodAnnotation, ComparisonsOfInterest, NamesOfFoldChangeColumns, NamesOfTstatColumns)
-
-# [1] "Double check that the vectors containing the fold change and tstat column names contain the same order as the group comparisons of interest - otherwise this function won't work properly!  If the order matches, proceed:"
-# [1] "# of rows with unique NCBI IDs:"
-# [1] 18563
-# [1] "# of rows with unique Gene Symbols:"
-# [1] 18563
-# [1] "Dimensions of Fold Change matrix, averaged by gene symbol:"
-# [1] 18563     1
-# [1] "Output: Named DEResults_GSE181285"
-
-#################
-
-FilteringDEResults_GoodAnnotation(differentials[[3]])
-
-# [1] "# of rows in results"
-# [1] 18964
-# [1] "# of rows with missing NCBI annotation:"
-# [1] NA
-# [1] "# of rows with NA NCBI annotation:"
-# [1] 1768
-# [1] "# of rows with missing Gene Symbol annotation:"
-# [1] 1768
-# [1] "# of rows mapped to multiple NCBI_IDs:"
-# [1] 0
-# [1] "# of rows mapped to multiple Gene Symbols:"
-# [1] 0
-# [1] "# of rows with good annotation"
-# [1] 17196
-# [1] "Outputted object: DE_Results_GoodAnnotation"
-
-
-#These are the names of the Log2FC Columns for our statistical contrasts of interest within the differential expression results for this particular result set:
-
-NamesOfFoldChangeColumns<-colnames(DE_Results_GoodAnnotation)[colnames(DE_Results_GoodAnnotation)%in%Contrasts_Log2FC]
-
-#These are the names of the T-statistic Columns for our statistical contrasts of interest within the differential expression results for this particular result set:
-
-NamesOfTstatColumns<-colnames(DE_Results_GoodAnnotation)[colnames(DE_Results_GoodAnnotation)%in%Contrasts_Tstat]
-
-#Next we're going to pull out the contrast IDs associated with each result:
-
-GetContrastIDsforResultSet(NamesOfFoldChangeColumns)
-
-ContrastIDs_inCurrentDF
-#[1] "204289"
-
-#Next we're going to grab some metadata to go with those statistical contrasts
-
-#I would like the dataset id for our contrasts:
-Datasets_inCurrentDF<-ResultSet_contrasts$ExperimentID[ResultSet_contrasts$ContrastIDs%in%ContrastIDs_inCurrentDF]
-
-#And I would like the experimental factor information for our statistical contrast:
-Factors_inCurrentDF<-ResultSet_contrasts$ExperimentalFactors[ResultSet_contrasts$ContrastIDs%in%ContrastIDs_inCurrentDF]
-
-#We can combine those to make an interpretable unique identifier for each statistical comparison:
-ComparisonsOfInterest<-paste(Datasets_inCurrentDF, Factors_inCurrentDF, sep="_" )
-
-ComparisonsOfInterest
-#[1] "GSE205325_lipopolysaccharide delivered at dose 28 x 0.1 mg/kg"
-
-#That names is super unwieldy. I'm going to rename it:
-ComparisonsOfInterest<-c("GSE205325_LPS_Chronic")
-
-GSE_ID<-Datasets_inCurrentDF[1]
-GSE_ID
-#[1] "GSE205325"
-
-CollapsingDEResults_OneResultPerGene(GSE_ID, DE_Results_GoodAnnotation, ComparisonsOfInterest, NamesOfFoldChangeColumns, NamesOfTstatColumns)
-
-#######################
-
-#To do:
-#double-check that I successfully functionalized some of the middle code where we pull out column names etc.
-#make sure environment is actually cleaned up after each dataset
-#add contrast id to items named with just the dataset name - directory, DEResults object
-#make notes that print out in the console also print out into a text document
-#split up function script and sample pipeline script
-
-#######################
-
-library(plyr)
-
-AligningRatDatasets<-function(ListOfRatDEResults){
-  
-  Rat_MetaAnalysis_FoldChange_Dfs<-list()
-  
-  for(i in c(1:length(ListOfRatDEResults))){
-    Rat_MetaAnalysis_FoldChange_Dfs[[i]]<-data.frame(Rat_EntrezGene.ID=row.names(ListOfRatDEResults[[i]][[1]]),ListOfRatDEResults[[i]][[1]], stringsAsFactors=FALSE)
-  }
-  
-  print("Rat_MetaAnalysis_FoldChange_Dfs:")
-  print(str(Rat_MetaAnalysis_FoldChange_Dfs))
-  
-  Rat_MetaAnalysis_FoldChanges<<-join_all(Rat_MetaAnalysis_FoldChange_Dfs, by="Rat_EntrezGene.ID", type="full")
-  #This function could be join_all (if there are more than 2 datasets) or merge/merge_all (if the plyr package isn't working)
-  
-  print("Rat_MetaAnalysis_FoldChanges:")
-  print(str(Rat_MetaAnalysis_FoldChanges))
-  
-  Rat_MetaAnalysis_SV_Dfs<-list()
-  
-  for(i in c(1:length(ListOfRatDEResults))){
-    Rat_MetaAnalysis_SV_Dfs[[i]]<-data.frame(Rat_EntrezGene.ID=row.names(ListOfRatDEResults[[i]][[4]]),ListOfRatDEResults[[i]][[4]], stringsAsFactors=FALSE)
-  }
-  
-  print("Rat_MetaAnalysis_SV_Dfs:")
-  print(str(Rat_MetaAnalysis_SV_Dfs))
-  
-  Rat_MetaAnalysis_SV<<-join_all(Rat_MetaAnalysis_SV_Dfs, by="Rat_EntrezGene.ID", type="full")
-  #This function could be join_all (if there are more than 2 datasets) or merge/merge_all (if the plyr package isn't working)
-  
-  print("Rat_MetaAnalysis_SV:")
-  print(str(Rat_MetaAnalysis_SV))
-  
-  rm(Rat_MetaAnalysis_SV_Dfs, Rat_MetaAnalysis_FoldChange_Dfs)
-}
-
-#Example Usage;
-
-ListOfRatDEResults<-list(DEResults_GSE205325)
-
-AligningRatDatasets(ListOfRatDEResults)
-
-
-###########
-
-AligningMouseDatasets<-function(ListOfMouseDEResults){
-  
-  Mouse_MetaAnalysis_FoldChange_Dfs<-list()
-  
-  for(i in c(1:length(ListOfMouseDEResults))){
-    Mouse_MetaAnalysis_FoldChange_Dfs[[i]]<-data.frame(Mouse_EntrezGene.ID=row.names(ListOfMouseDEResults[[i]][[1]]),ListOfMouseDEResults[[i]][[1]], stringsAsFactors=FALSE)
-  }
-  
-  print("Mouse_MetaAnalysis_FoldChange_Dfs:")
-  print(str(Mouse_MetaAnalysis_FoldChange_Dfs))
-  
-  Mouse_MetaAnalysis_FoldChanges<<-join_all(Mouse_MetaAnalysis_FoldChange_Dfs, by="Mouse_EntrezGene.ID", type="full")
-  #This function could be join_all (if there are more than 2 datasets) or merge/merge_all (if the plyr package isn't working)
-  
-  print("Mouse_MetaAnalysis_FoldChanges:")
-  print(str(Mouse_MetaAnalysis_FoldChanges))
-  
-  Mouse_MetaAnalysis_SV_Dfs<-list()
-  
-  for(i in c(1:length(ListOfMouseDEResults))){
-    Mouse_MetaAnalysis_SV_Dfs[[i]]<-data.frame(Mouse_EntrezGene.ID=row.names(ListOfMouseDEResults[[i]][[4]]),ListOfMouseDEResults[[i]][[4]], stringsAsFactors=FALSE)
-  }
-  
-  print("Mouse_MetaAnalysis_SV_Dfs:")
-  print(str(Mouse_MetaAnalysis_SV_Dfs))
-  
-  Mouse_MetaAnalysis_SV<<-join_all(Mouse_MetaAnalysis_SV_Dfs, by="Mouse_EntrezGene.ID", type="full")
-  #This function could be join_all (if there are more than 2 datasets) or merge/merge_all (if the plyr package isn't working)
-  
-  print("Mouse_MetaAnalysis_SV:")
-  print(str(Mouse_MetaAnalysis_SV))
-  
-  rm(Mouse_MetaAnalysis_SV_Dfs, Mouse_MetaAnalysis_FoldChange_Dfs)
-}
-
-#Example Usage;
-
-ListOfMouseDEResults<-list(DEResults_GSE126678, DEResults_GSE181285)
-
-AligningMouseDatasets(ListOfMouseDEResults)
-
-
-############
-
-#Code for aligning the rat and mice results:
-
-#We have the ortholog database that we downloaded from Jackson Labs on April 25, 2024
-#This database was trimmed and formatted using the code "FormattingRatMouseOrthologDatabase_20240425.R"
-MouseVsRat_NCBI_Entrez<-read.csv("MouseVsRat_NCBI_Entrez_JacksonLab_20240425.csv", header=TRUE, stringsAsFactors = FALSE, row.names=1, colClasses=c("character", "character", "character"))
-
-Mouse_MetaAnalysis_FoldChanges_wOrthologs<-join(MouseVsRat_NCBI_Entrez, Mouse_MetaAnalysis_FoldChanges, by="Mouse_EntrezGene.ID", type="full")
-str(Mouse_MetaAnalysis_FoldChanges_wOrthologs)
-#'data.frame':	25288 obs. of  6 variables:
-
-#If there are rat datasets:
-MetaAnalysis_FoldChanges<-join(Mouse_MetaAnalysis_FoldChanges_wOrthologs, Rat_MetaAnalysis_FoldChanges, by="Rat_EntrezGene.ID", type="full")
-str(MetaAnalysis_FoldChanges)
-#'data.frame':	28101 obs. of  7 variables:
-
-#If there aren't any rat datasets:
-MetaAnalysis_FoldChanges<-Mouse_MetaAnalysis_FoldChanges_wOrthologs
-str(MetaAnalysis_FoldChanges)
-
-
-Mouse_MetaAnalysis_SV_wOrthologs<-join(MouseVsRat_NCBI_Entrez, Mouse_MetaAnalysis_SV, by="Mouse_EntrezGene.ID", type="full")
-str(Mouse_MetaAnalysis_SV_wOrthologs)
-#'data.frame':	25288 obs. of  6 variables:
-
-#If there are rat datasets:
-MetaAnalysis_SV<-join(Mouse_MetaAnalysis_SV_wOrthologs, Rat_MetaAnalysis_SV, by="Rat_EntrezGene.ID", type="full")
-str(MetaAnalysis_SV)
-#'data.frame':	28101 obs. of  7 variables:
-
-#If there aren't any rat datasets:
-MetaAnalysis_SV<-Mouse_MetaAnalysis_SV_wOrthologs
-
-#For simplicity's sake, I'm going to replace that Mouse-Rat Entrez annotation
-#Because it is missing entries for any genes in the datasets that *don't* have orthologs
-MetaAnalysis_FoldChanges$MouseVsRat_EntrezGene.ID<-paste(MetaAnalysis_FoldChanges$Mouse_EntrezGene.ID, MetaAnalysis_FoldChanges$Rat_EntrezGene.ID, sep="_")
-MetaAnalysis_SV$MouseVsRat_EntrezGene.ID<-paste(MetaAnalysis_SV$Mouse_EntrezGene.ID, MetaAnalysis_SV$Rat_EntrezGene.ID, sep="_")
-
-
-#Comparing Log2FC across datasets
-
-#Simple scatterplot... not so promising:
-colnames(MetaAnalysis_FoldChanges)
-
-# [1] "Rat_EntrezGene.ID"                  "Mouse_EntrezGene.ID"                "MouseVsRat_EntrezGene.ID"          
-# [4] "LPS_SubchronicAndAcute_vs_Vehicle"  "LPS_Acute_vs_Vehicle"               "LPS_Subchronic_vs_Vehicle"         
-# [7] "LPS_Acute850ugPerKg_vs_Vehicle"     "LPS_Chronic_vs_Vehicle_AllStressed"
-
-
-plot(MetaAnalysis_FoldChanges$LPS_Subchronic_vs_Vehicle~MetaAnalysis_FoldChanges$LPS_Chronic_vs_Vehicle_AllStressed)
-
-#Note - many people prefer to plot these relationships using RRHOs (Rank rank hypergeometric overlap plots)
-#I like using both.
-#The code for the RRHOs is a little complicated, but I'm happy to share if folks are interested.
-
-cor(as.matrix(MetaAnalysis_FoldChanges[,-c(1:3)]), use="pairwise.complete.obs", method="spearman")
-#There isn't much similarity across conditions here (outside of comparisons within the same experiment)
-
-#An illustration of the correlation matrix using a hierarchically clustered heatmap, although somewhat pathetic:
-heatmap(cor(as.matrix(MetaAnalysis_FoldChanges[,-c(1:3)]), use="pairwise.complete.obs", method="spearman"))
-
-
-
+#... and then we would just move on to our next two contrasts:
+#differentials[[2]] and differentials [[3]]

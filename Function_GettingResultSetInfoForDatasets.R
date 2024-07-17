@@ -96,6 +96,9 @@ GettingResultSetInfoForDatasets<-function(ExperimentIDs){
   #And then write everything out as a .csv file that we can easily mark up in a spreadsheet program:
   write.csv(ResultSets_toScreen, "ResultSets_toScreen.csv")
   
+  print("The Result Sets for your Datasets have been outputted into ResultSets_toScreen.csv")
+  print(str(ResultSets_toScreen))
+  
   #And clean up our environment:
   rm(Include, WrongBaseline, ResultsNotRegionSpecific, ReAnalyze)
 }
