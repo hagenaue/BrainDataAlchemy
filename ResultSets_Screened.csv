@@ -1,0 +1,6 @@
+,ExperimentID,ResultSetIDs,ContrastIDs,ExperimentIDs,FactorCategory,ExperimentalFactors,BaselineFactors,Subsetted,SubsetBy,Include,WrongBaseline,ResultsNotRegionSpecific,ReAnalyze
+2,GSE126678,553805,151618,15127,treatment,"lipopolysaccharide has modifier Acute immune challenge , vehicle; lipopolysaccharide has modifier Acute immune challenge , vehicle",vehicle has role reference substance role,FALSE,NA,,,,
+3,GSE126678,553805,151617,15127,treatment,lipopolysaccharide has modifier Long-term subchronic immune challenge + acute immune challenge,vehicle has role reference substance role,FALSE,NA,,,,
+4,GSE126678,553805,151619,15127,treatment,"lipopolysaccharide has modifier long-term subchronic immune challenge , vehicle; lipopolysaccharide has modifier long-term subchronic immune challenge , vehicle",vehicle has role reference substance role,FALSE,NA,,,,
+9,GSE181285,570552,186753,21341,treatment,lipopolysaccharide delivered at dose 850 ug/kg,reference substance role,FALSE,NA,,,,
+14,GSE205325,556647,204289,24923,treatment,lipopolysaccharide delivered at dose 28 x 0.1 mg/kg,reference substance role,FALSE,NA,,,,
