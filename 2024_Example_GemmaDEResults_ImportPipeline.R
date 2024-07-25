@@ -385,5 +385,147 @@ CollapsingDEResults_OneResultPerGene(GSE_ID, DE_Results_GoodAnnotation, Comparis
 
 #################
 
+
 #... and then we would just move on to our next two contrasts:
 #differentials[[2]] and differentials [[3]]
+
+DE_Results<-differentials[[2]]
+
+FilteringDEResults_GoodAnnotation(DE_Results)
+
+# [1] "# of rows in results"
+# [1] 45100
+# [1] "# of rows with missing NCBI annotation:"
+# [1] 13489
+# [1] "# of rows with NA NCBI annotation:"
+# [1] 0
+# [1] "# of rows with missing Gene Symbol annotation:"
+# [1] 13489
+# [1] "# of rows mapped to multiple NCBI_IDs:"
+# [1] 717
+# [1] "# of rows mapped to multiple Gene Symbols:"
+# [1] 717
+# [1] "# of rows with good annotation"
+# [1] 30894
+# [1] "Outputted object: DE_Results_GoodAnnotation"
+
+ExtractingDEResultsForContrasts(DE_Results_GoodAnnotation, Contrasts_Log2FC, Contrasts_Tstat, ResultSet_contrasts)
+
+# [1] "These are all of the columns in the differential expression results for our current result set:"
+# [1] "Probe"                       "NCBIid"                     
+# [3] "GeneSymbol"                  "GeneName"                   
+# [5] "pvalue"                      "corrected_pvalue"           
+# [7] "rank"                        "contrast_186753_coefficient"
+# [9] "contrast_186753_log2fc"      "contrast_186753_tstat"      
+# [11] "contrast_186753_pvalue"     
+# [1] "These are the names of the Log(2) Fold Change Columns for our statistical contrasts of interest within the differential expression results for this particular result set:"
+# [1] "contrast_186753_log2fc"
+# [1] "These are the names of the T-statistic Columns for our statistical contrasts of interest within the differential expression results for this particular result set:"
+# [1] "contrast_186753_tstat"
+# [1] "These are the contrast ids for the statistical contrasts of interest within your current result set:"
+# [1] "186753"
+# [1] "This is the dataset id for the result set and statistical contrasts:"
+# [1] "GSE181285"
+# [1] "These are the current names for your statistical contrasts of interest - if they are unwieldy, you may want to change them"
+# [1] "GSE181285_lipopolysaccharide delivered at dose 850 ug/kg"
+
+ComparisonsOfInterest<-c("GSE181285_LPS_Acute")
+
+CollapsingDEResults_OneResultPerGene(GSE_ID, DE_Results_GoodAnnotation, ComparisonsOfInterest, NamesOfFoldChangeColumns, NamesOfTstatColumns)
+
+# [1] "Double check that the vectors containing the fold change and tstat column names contain the same order as the group comparisons of interest - otherwise this function won't work properly!  If the order matches, proceed:"
+# [1] "# of rows with unique NCBI IDs:"
+# [1] 18563
+# [1] "# of rows with unique Gene Symbols:"
+# [1] 18563
+# [1] "Dimensions of Fold Change matrix, averaged by gene symbol:"
+# [1] 18563     1
+# [1] "Output: Named DEResults_GSE181285"
+
+#########################
+
+#On to ResultSet #3:
+
+DE_Results<-differentials[[3]]
+
+FilteringDEResults_GoodAnnotation(DE_Results)
+# [1] "# of rows in results"
+# [1] 18964
+# [1] "# of rows with missing NCBI annotation:"
+# [1] 0
+# [1] "# of rows with NA NCBI annotation:"
+# [1] 1768
+# [1] "# of rows with missing Gene Symbol annotation:"
+# [1] 1768
+# [1] "# of rows mapped to multiple NCBI_IDs:"
+# [1] 0
+# [1] "# of rows mapped to multiple Gene Symbols:"
+# [1] 0
+# [1] "# of rows with good annotation"
+# [1] 17196
+# [1] "Outputted object: DE_Results_GoodAnnotation"
+
+ExtractingDEResultsForContrasts(DE_Results_GoodAnnotation, Contrasts_Log2FC, Contrasts_Tstat, ResultSet_contrasts)
+
+# [1] "These are all of the columns in the differential expression results for our current result set:"
+# [1] "Probe"                       "NCBIid"                     
+# [3] "GeneSymbol"                  "GeneName"                   
+# [5] "pvalue"                      "corrected_pvalue"           
+# [7] "rank"                        "contrast_204289_coefficient"
+# [9] "contrast_204289_log2fc"      "contrast_204289_tstat"      
+# [11] "contrast_204289_pvalue"     
+# [1] "These are the names of the Log(2) Fold Change Columns for our statistical contrasts of interest within the differential expression results for this particular result set:"
+# [1] "contrast_204289_log2fc"
+# [1] "These are the names of the T-statistic Columns for our statistical contrasts of interest within the differential expression results for this particular result set:"
+# [1] "contrast_204289_tstat"
+# [1] "These are the contrast ids for the statistical contrasts of interest within your current result set:"
+# [1] "204289"
+# [1] "This is the dataset id for the result set and statistical contrasts:"
+# [1] "GSE205325"
+# [1] "These are the current names for your statistical contrasts of interest - if they are unwieldy, you may want to change them"
+# [1] "GSE205325_lipopolysaccharide delivered at dose 28 x 0.1 mg/kg"
+
+ComparisonsOfInterest<-c("GSE205325_LPS_Chronic")
+
+CollapsingDEResults_OneResultPerGene(GSE_ID, DE_Results_GoodAnnotation, ComparisonsOfInterest, NamesOfFoldChangeColumns, NamesOfTstatColumns)
+
+# [1] "Double check that the vectors containing the fold change and tstat column names contain the same order as the group comparisons of interest - otherwise this function won't work properly!  If the order matches, proceed:"
+# [1] "# of rows with unique NCBI IDs:"
+# [1] 17196
+# [1] "# of rows with unique Gene Symbols:"
+# [1] 17195
+# [1] "Dimensions of Fold Change matrix, averaged by gene symbol:"
+# [1] 17196     1
+# [1] "Output: Named DEResults_GSE205325"
+
+
+###################
+
+#My differential expression results are now saved in three objects:
+#DEResults_GSE126678
+#DEResults_GSE181285
+#DEResults_GSE205325
+
+#Since I was debugging functions, I ended up with a lot of other extra, useless objects leftover in my environment
+#This code removes them:
+rm(differentials, FoldChangeColumn, MatrixOfColumnNames_BrokenUp, TempMasterResults, TstatColumn, ComparisonsOfInterest, ContrastIDs_inCurrentDF, Contrasts_Log2FC, Contrasts_Tstat, Datasets_inCurrentDF, DE_Results, DE_Results_GoodAnnotation, Factors_inCurrentDF, GSE_ID, i, NamesOfFoldChangeColumns, NamesOfTstatColumns, DE_Results_GoodAnnotation_FoldChange_Average, DE_Results_GoodAnnotation_FoldChange_AveragedByGene, DE_Results_GoodAnnotation_SE, DE_Results_GoodAnnotation_SE_Average, DE_Results_GoodAnnotation_SE_AveragedByGene, DE_Results_GoodAnnotation_SV, DE_Results_GoodAnnotation_Tstat_Average, DE_Results_GoodAnnotation_Tstat_AveragedByGene, ColumnNames_BrokenUp)
+
+###################
+
+#Save the code and workspace! 
+#Based on your project settings, this may happen automatically
+#Many times you will hear advice not to save the workspace because it should be able to be completely recreated using your code.
+#In this situation, we definitely want to save the workspace because it can take time to import all of the results from Gemma's API and process them.
+#Also, that makes it easier to go back and recreate figures, results etc when we need to for publications, etc
+#Because if we import the results from Gemma again, they may be slightly different
+#Due to updates to the genome annotation.
+
+#The code file is saved using:
+#"File"->"Save"
+#The code file will have a file extension ".R"
+
+#Whereas the workspace is saved using:
+#"Session"->"Save workspace as"
+#The workspace file will have a file extension ".Rdata"
+
+
