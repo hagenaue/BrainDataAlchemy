@@ -4,8 +4,8 @@ Code to mine for the summer Brain Data Alchemy meta-analysis projects.
 
 ## Pipeline from Summer 2024:
 
-This code is all within the
-
+This code is all within the MetaAnalysis_GemmaDEResults_2024 folder:
+https://github.com/hagenaue/BrainDataAlchemy/tree/main/MetaAnalysis_GemmaDEResults_2024
 
 ## Pipeline from Summer 2023:
 
