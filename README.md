@@ -5,6 +5,7 @@ Code to mine for the summer Brain Data Alchemy meta-analysis projects.
 
 Now overviewed in detail in the published protocol:
 Hagenauer M, Rhoads C, Xiong J, Nguyen DM, Hernandez E, Saffron A, Kondur A, Flandreau EI: Protocol: Brain Data Alchemy Project: Meta-Analysis of Re-Analyzed Public Transcriptional Profiling Data in the Gemma Database, 08/2024., dx.doi.org/10.17504/protocols.io.j8nlk84jxl5r/v1
+https://www.protocols.io/view/brain-data-alchemy-project-meta-analysis-of-re-ana-j8nlk84jxl5r/v1  
 
 The published protocol provides links to each of the relevant code documents in this folder.
 
