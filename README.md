@@ -1,16 +1,11 @@
 # BrainDataAlchemy
 Code to mine for the summer Brain Data Alchemy meta-analysis projects.
 
-## Pipeline from Summer 2022:
 
-This code is all within the MetaAnalysis_GemmaDEResults folder:
-https://github.com/hagenaue/BrainDataAlchemy/tree/main/MetaAnalysis_GemmaDEResults%20
+## Pipeline from Summer 2024:
 
-The pipeline is overviewed in detail in a published protocol:
-Hagenauer M, Rhoads C, Xiong J, Nguyen DM, Hernandez E, Saffron A, Kondur A, Flandreau EI: Protocol: Brain Data Alchemy Project: Meta-Analysis of Re-Analyzed Public Transcriptional Profiling Data in the Gemma Database, 08/2024., dx.doi.org/10.17504/protocols.io.j8nlk84jxl5r/v1 ,
-https://www.protocols.io/view/brain-data-alchemy-project-meta-analysis-of-re-ana-j8nlk84jxl5r/v1  
+This code is all within the
 
-The published protocol provides links to each of the relevant code documents within the folder, embedded in detailed explanation.
 
 ## Pipeline from Summer 2023:
 
@@ -65,6 +60,17 @@ https://github.com/hagenaue/BrainDataAlchemy/blob/main/MetaAnalysis_GemmaDataset
 10) Running a fancier version of the meta-analysis (intercept and modifying variable):
 https://github.com/hagenaue/BrainDataAlchemy/blob/main/MetaAnalysis_GemmaDatasets%20/2023_ExampleCode_FancierMetaAnalysis_Christabel.R
 
+
+## Pipeline from Summer 2022:
+
+This code is all within the MetaAnalysis_GemmaDEResults folder:
+https://github.com/hagenaue/BrainDataAlchemy/tree/main/MetaAnalysis_GemmaDEResults%20
+
+The pipeline is overviewed in detail in a published protocol:
+Hagenauer M, Rhoads C, Xiong J, Nguyen DM, Hernandez E, Saffron A, Kondur A, Flandreau EI: Protocol: Brain Data Alchemy Project: Meta-Analysis of Re-Analyzed Public Transcriptional Profiling Data in the Gemma Database, 08/2024., dx.doi.org/10.17504/protocols.io.j8nlk84jxl5r/v1 ,
+https://www.protocols.io/view/brain-data-alchemy-project-meta-analysis-of-re-ana-j8nlk84jxl5r/v1  
+
+The published protocol provides links to each of the relevant code documents within the folder, embedded in detailed explanation.
 
 
 
