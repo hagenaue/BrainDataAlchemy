@@ -12,6 +12,12 @@ setwd("~/Library/CloudStorage/GoogleDrive-hagenaue@umich.edu/My Drive/BrainAlche
 
 #############
 
+#Note: start with an empty workspace - some of these objects are named similarly to objects that we've used in other coding tasks
+
+rm(list = ls())
+
+#############
+
 #Read in meta-analysis results (or any other differential expression results):
 
 Meta_Results<-read.csv("metaOutputFDR_orderedByPval.csv", header=TRUE, stringsAsFactors = FALSE)
