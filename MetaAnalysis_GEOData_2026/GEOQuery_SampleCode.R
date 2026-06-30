@@ -99,3 +99,69 @@ getwd()
 # [1] "/Users/hagenaue/Library/CloudStorage/GoogleDrive-hagenaue@umich.edu/My Drive/BrainAlchemyProject/ProjectFolders/2026_TeamStress/R_Output_And_Results/Practice_Megan"
 
 
+#########################
+#########################
+
+#How to extract the sample metadata in data frame format for a single GEO series:
+
+#Use GEOQuery to pull down the full record (sample metadata and expression data)
+
+library(GEOquery)
+
+gse_raw <- getGEO("GSE237890", GSEMatrix=TRUE)
+
+
+#You can see all of the goodies stashed in this object using the structure function:
+str(gse_raw)
+
+#Grab the "expression set" component of the object (item #1)
+eset<-gse_raw[[1]]
+
+#Grab the "phenoData" (sample metadata) for the expression set:
+metadata_df <- pData(eset)
+
+#You can see all of the components in the phenoData using str:
+str(metadata_df)
+
+#Or the column names for the phenoData:
+colnames(metadata_df)
+
+#Note: A lot of these column names have been auto named "characteristics_ch1..."
+
+#To find out what those actually are, you can click on the data frame in your global environment (upper right)
+#the actual variable name is stashed in the individual cells for the columns followed by a hyphen.
+
+#Or you can view the first few rows of the phenoData using head:
+head(metadata_df)
+
+#Or you can write out the metadata as a .csv file and peruse it in a spreadsheet program:
+getwd()
+
+write.csv(metadata_df, "GSE237890_MetaData.csv")
+
+
+#If we want to find out the distribution for our categorical variables (i.e., how many subjects are in each group), we can use tables and cross-tables:
+
+#e.g.,
+table(metadata_df$characteristics_ch1.3)
+
+# social defeat stress: no social defeat stress (NIL) 
+# 38 
+# social defeat stress: social defeat stress (SD) 
+# 42 
+
+table(metadata_df$characteristics_ch1.4)
+
+# adolescent environmental enrichment: social and environmental enrichment (EE) 
+# 42 
+# adolescent environmental enrichment: standard housing (NIL) 
+# 38
+
+#here's an example of a cross-table looking at how many subjects are in each subgroup defined by two variables (social defeat stress vs. no stress, environmental enrichment vs. standard housing):
+table(metadata_df$characteristics_ch1.3, metadata_df$characteristics_ch1.4)
+
+#here's an example of a cross-table looking at how many subjects are in each subgroup defined by three variables (social defeat stress vs. no stress, environmental enrichment vs. standard housing, hippocampus vs. nucleus accumbens):
+table(metadata_df$characteristics_ch1.3, metadata_df$characteristics_ch1.4, metadata_df$source_name_ch1)
+
+
+
