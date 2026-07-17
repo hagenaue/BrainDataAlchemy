@@ -1,3 +1,10 @@
+#This is example code demonstrating how to pull down information from Gemma about...
+## The distribution of the preprocessed data on Gemma
+## The statistical contrasts performed during differential expression analysis by Gemma
+# Megan Hagenauer
+# July 17, 2026
+
+
 #Install the Gemma.R package:
 
 if (!require("BiocManager", quietly = TRUE))
@@ -8,9 +15,10 @@ BiocManager::install("gemma.R")
 #Load the Gemma.R package
 library(gemma.R)
 
+
 #Provide a vector containing your GEO Accession IDs or...
-ExperimentIDs<-c("GSE135306", "GSE81672", "GSE180465", "GSE179667", "GSE146358", "GSE128255", "GSE187418")
-ExperimentIDs
+# ExperimentIDs<-c("GSE135306", "GSE81672", "GSE180465", "GSE179667", "GSE146358", "GSE128255", "GSE187418")
+# ExperimentIDs
 
 #... or you can copy them into a spreadsheet as a single column and save them as a .csv file (preferably in the same order as your inclusion/exclusion spreadsheet, without a column name (header)) and read them in:
 ExperimentIDs<-read.csv("YourGEOAccessionIDs.csv", header=FALSE, stringsAsFactors = FALSE)
@@ -22,46 +30,62 @@ ExperimentIDs<-ExperimentIDs[,1]
 str(ExperimentIDs)
 #This should be a vector now
 
+GemmaExpressionInfo<-data.frame(ExperimentIDs=ExperimentIDs, InGemma=character(length=length(ExperimentIDs)), MinExpression=numeric(length=length(ExperimentIDs)), MedianExpression=numeric(length=length(ExperimentIDs)), MaxExpression=numeric(length=length(ExperimentIDs)))
 
-#Let's loop over each of the GEO Acession IDs:
+str(GemmaExpressionInfo)
+
+#Let's loop over each of the GEO Accession IDs:
 
 for(i in c(1:length(ExperimentIDs))){
-
+  
   #To track what we are doing, let's print which GEO Accession ID we are on:
   print(ExperimentIDs[i])
-
+  
   #Let's test whether that GEO Accession ID is in the Gemma database. If it isn't, let's just print an error and skip to the end of the loop:
-
+  
   if(inherits(try(get_dataset_processed_expression(ExperimentIDs[i]), silent=TRUE), "try-error")){
     
     print("Error: Not in Gemma")
-
-  #If there isn't an error, let's grab the preprocessed expression data from Gemma, output a histogram of it, and print some summary statistics:
-
+    GemmaExpressionInfo$InGemma[i]<-"N"
+    
+    #If there isn't an error, let's grab the preprocessed expression data from Gemma, output a histogram of it, and print some summary statistics:
+    
   }else{
-  
-  Expression<-gemma.R::get_dataset_processed_expression(ExperimentIDs[i])
-  
-  ExpressionMatrix<-as.matrix(Expression[,-c(1:4)])
-  
-  pdf(paste(ExperimentIDs[i], "_Histogram.pdf", sep=""), height=4, width=4)
-      
-  hist(ExpressionMatrix, main="Histogram", xlab="Log2 Expression", col="green", cex.axis=1.3, cex.lab=1.3)
-  
-  dev.off()
-  
-  print(min(ExpressionMatrix, na.rm=TRUE))
-  
-  print(median(ExpressionMatrix, na.rm=TRUE))
- 
-  print(max(ExpressionMatrix, na.rm=TRUE))
+    
+    GemmaExpressionInfo$InGemma[i]<-"Y"
+    
+    Expression<-gemma.R::get_dataset_processed_expression(ExperimentIDs[i])
+    
+    ExpressionMatrix<-as.matrix(Expression[,-c(1:4)])
+    
+    pdf(paste(ExperimentIDs[i], "_Histogram.pdf", sep=""), height=4, width=4)
+    
+    hist(ExpressionMatrix, main="Histogram", xlab="Log2 Expression", col="green", cex.axis=1.3, cex.lab=1.3)
+    
+    dev.off()
+    
+    print(min(ExpressionMatrix, na.rm=TRUE))
+    
+    GemmaExpressionInfo$MinExpression[i]<-min(ExpressionMatrix, na.rm=TRUE)
+    
+    print(median(ExpressionMatrix, na.rm=TRUE))
+    
+    GemmaExpressionInfo$MedianExpression[i]<-median(ExpressionMatrix, na.rm=TRUE)
+    
+    print(max(ExpressionMatrix, na.rm=TRUE))
+    
+    GemmaExpressionInfo$MaxExpression[i]<-max(ExpressionMatrix, na.rm=TRUE)
 
-  #Before moving on, we need to clean up our workspace:
-  rm(Expression, ExpressionMatrix)
-  
+    #Before moving on, we need to clean up our workspace:
+    rm(Expression, ExpressionMatrix)
+    
   }
   
 }
+
+str(GemmaExpressionInfo)
+
+write.csv(GemmaExpressionInfo, "GemmaExpressionInfo.csv")
 
 #The histograms should be outputted in your working directory
 # the summary stats will be printed in your console - you should save them somewhere in your working directory.
