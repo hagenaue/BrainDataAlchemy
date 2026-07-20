@@ -20,6 +20,8 @@ ExperimentIDs<-GemmaExpressionInfo_Keep$ExperimentIDs[GemmaExpressionInfo_Keep$K
 
 #The code from step 8.2 in the 2024 protocol:
 
+library(gemma.R)
+
 GettingResultSetInfoForDatasets<-function(ExperimentIDs){
   
   #Making an empty data.frame to store results:
