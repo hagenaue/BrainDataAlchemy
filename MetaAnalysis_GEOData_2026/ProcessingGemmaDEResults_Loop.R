@@ -8,8 +8,26 @@
 #But we can fix those later...
 #The loop may also crash on some datasets, in which case just jump to the next dataset (iteration)
 
+#####################
 
-#First step, download the functions from the 2024 BDA github repository and put them in your working directory
+#Install and load the necessary code packages
+
+#should already be installed from previous steps:
+
+library(gemma.R)
+
+install.packages("tidyverse")
+
+library(tidyverse)
+
+install.packages("dplyr")
+
+library (dplyr)
+
+########################
+
+
+#Next, download the functions from the 2024 BDA github repository and put them in your working directory
 https://github.com/hagenaue/BrainDataAlchemy/tree/main/MetaAnalysis_GemmaDEResults_2024
 
 #source the functions from their files:
@@ -20,6 +38,7 @@ source("Function_ExtractingDEResultsForContrasts.R")
 
 source("Function_CollapsingDEResults_OneResultPerGene.R")
 
+########################
 
 #And then apply the functions to your differentials object:
 
@@ -39,6 +58,7 @@ for(i in c(1:length(differentials)) ){
   setwd(YourWorkingDirectory)
 }
 
+########################
 
 #Save your workspace!  (under R session)
 #Save your code! (under file)
