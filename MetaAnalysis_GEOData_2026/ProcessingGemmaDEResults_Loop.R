@@ -38,7 +38,7 @@ library(dplyr)
 #https://github.com/hagenaue/BrainDataAlchemy/blob/main/MetaAnalysis_GEOData_2026/Function_ExtractingDEResultsForContrasts.R
 
 #Function_CollapsingDEResults_OneResultPerGene:
-#https://github.com/hagenaue/BrainDataAlchemy/blob/main/MetaAnalysis_GemmaDEResults_2024/Function_CollapsingDEResults_OneResultPerGene.R
+#https://github.com/hagenaue/BrainDataAlchemy/blob/main/MetaAnalysis_GEOData_2026/Function_CollapsingDEResults_OneResultPerGene.R
 
 ##########################
 
