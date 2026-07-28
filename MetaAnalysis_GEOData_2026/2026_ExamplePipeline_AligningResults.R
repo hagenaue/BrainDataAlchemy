@@ -33,48 +33,17 @@ source("Function_AligningDEResults.R")
 
 #Example Usage:
 
-ListOfMouseDEResults<-list(DEResults_GSE111212_515554, DEResults_GSE123582_519225)
+ListOfMouseDEResults<-list(DEResults_GSE179081_522199, DEResults_GSE150812_520023, DEResults_GSE111270_523257, DEResults_GSE111215_534680, DEResults_GSE184615_533252)
+
+str(ListOfMouseDEResults[[3]])
 
 AligningMouseDatasets(ListOfMouseDEResults)
 
-# [1] "Mouse_MetaAnalysis_FoldChange_Dfs:"
-# List of 2
-# $ :'data.frame':	21614 obs. of  4 variables:
-#   ..$ Mouse_EntrezGene.ID              : chr [1:21614] "11287" "11298" "11302" "11303" ...
-# ..$ GSE126678_LPS_Acute              : num [1:21614] 1.9397 0.0805 0.0595 0.0306 0.276 ...
-# ..$ GSE126678_LPS_SubchronicPlusAcute: num [1:21614] 1.2967 -0.0472 -0.1459 0.1367 1.5651 ...
-# ..$ GSE126678_LPS_Subchronic         : num [1:21614] 0.0582 0.203 -0.1144 0.1361 -0.0051 ...
-# $ :'data.frame':	18563 obs. of  2 variables:
-#   ..$ Mouse_EntrezGene.ID: chr [1:18563] "100008567" "100009600" "100012" "100017" ...
-# ..$ GSE181285_LPS_Acute: num [1:18563] 0.0198 0.0225 0.0641 -0.0049 -0.0588 ...
-# NULL
-# [1] "Mouse_MetaAnalysis_FoldChanges:"
-# 'data.frame':	24287 obs. of  5 variables:
-#   $ Mouse_EntrezGene.ID              : chr  "11287" "11298" "11302" "11303" ...
-# $ GSE126678_LPS_Acute              : num  1.9397 0.0805 0.0595 0.0306 0.276 ...
-# $ GSE126678_LPS_SubchronicPlusAcute: num  1.2967 -0.0472 -0.1459 0.1367 1.5651 ...
-# $ GSE126678_LPS_Subchronic         : num  0.0582 0.203 -0.1144 0.1361 -0.0051 ...
-# $ GSE181285_LPS_Acute              : num  -0.042 -0.0368 -0.0534 0.1067 -0.5258 ...
-# NULL
-# [1] "Mouse_MetaAnalysis_SV_Dfs:"
-# List of 2
-# $ :'data.frame':	21614 obs. of  4 variables:
-#   ..$ Mouse_EntrezGene.ID              : chr [1:21614] "11287" "11298" "11302" "11303" ...
-# ..$ GSE126678_LPS_Acute              : num [1:21614] 0.62127 0.14737 0.00437 0.01624 1.34369 ...
-# ..$ GSE126678_LPS_SubchronicPlusAcute: num [1:21614] 0.66434 0.14559 0.00438 0.01567 0.98359 ...
-# ..$ GSE126678_LPS_Subchronic         : num [1:21614] 0.84004 0.14211 0.00439 0.01592 1.40671 ...
-# $ :'data.frame':	18563 obs. of  2 variables:
-#   ..$ Mouse_EntrezGene.ID: chr [1:18563] "100008567" "100009600" "100012" "100017" ...
-# ..$ GSE181285_LPS_Acute: num [1:18563] 0.11456 0.01612 0.00329 0.00487 0.00719 ...
-# NULL
-# [1] "Mouse_MetaAnalysis_SV:"
-# 'data.frame':	24287 obs. of  5 variables:
-#   $ Mouse_EntrezGene.ID              : chr  "11287" "11298" "11302" "11303" ...
-# $ GSE126678_LPS_Acute              : num  0.62127 0.14737 0.00437 0.01624 1.34369 ...
-# $ GSE126678_LPS_SubchronicPlusAcute: num  0.66434 0.14559 0.00438 0.01567 0.98359 ...
-# $ GSE126678_LPS_Subchronic         : num  0.84004 0.14211 0.00439 0.01592 1.40671 ...
-# $ GSE181285_LPS_Acute              : num  0.00391 0.02738 0.00601 0.0101 0.03332 ...
-# NULL
+str(Mouse_MetaAnalysis_FoldChanges)
+
+ListOfRatDEResults<-list(DEResults_GSE1833_535140)
+
+AligningRatDatasets(ListOfRatDEResults)
 
 #################
 
@@ -97,11 +66,12 @@ AligningMouseDatasets(ListOfMouseDEResults)
 
 #This definition came from NCBI (https://www.nlm.nih.gov/ncbi/workshops/2023-08_BLAST_evol/ortho_para.html)
 
-
 #We have the ortholog database that we downloaded from Jackson Labs on April 25, 2024
 #This database was trimmed and formatted using the code "FormattingRatMouseOrthologDatabase_20240425.R"
 
 MouseVsRat_NCBI_Entrez<-read.csv("HOM_MouseVsRat_EntrezEnsemblAgree_NoMultimapped_20260511.csv", header=TRUE, stringsAsFactors = FALSE, row.names=1, colClasses=c("character", "character", "character"))
+
+str(MouseVsRat_NCBI_Entrez)
 
 #We want to join this ortholog database to our mouse results (Log2FC and SV):
 
@@ -132,6 +102,7 @@ str(MetaAnalysis_FoldChanges)
 
 MetaAnalysis_SV<-Mouse_MetaAnalysis_SV_wOrthologs
 str(MetaAnalysis_SV)
+
 
 ###############################
 
