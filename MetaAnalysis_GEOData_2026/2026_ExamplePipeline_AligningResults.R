@@ -21,6 +21,9 @@ if (!requireNamespace("plyr", quietly = TRUE)) {
 #Download the necessary functions from our Github repository into your working directory:
 #https://github.com/hagenaue/BrainDataAlchemy/blob/main/MetaAnalysis_GemmaDEResults_2024/Function_AligningDEResults.R
 
+#Download the mouse vs. rat orthology file:
+#https://github.com/hagenaue/BrainDataAlchemy/blob/main/MetaAnalysis_GEOData_2026/HOM_MouseVsRat_EntrezEnsemblAgree_NoMultimapped_20260511.csv
+
 ############
 
 #Reading in the functions:
