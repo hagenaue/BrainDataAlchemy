@@ -168,6 +168,8 @@ colnames(MetaAnalysis_FoldChanges)
 # [32] "GSE299436_exercise"                                    
 # [33] "MouseRat_GeneSymbol" 
 
+write.csv(colnames(MetaAnalysis_FoldChanges), "Colnames_MetaAnalysisFoldChanges.csv")
+
 ###################
 
 #Comparing Log2FC across datasets
