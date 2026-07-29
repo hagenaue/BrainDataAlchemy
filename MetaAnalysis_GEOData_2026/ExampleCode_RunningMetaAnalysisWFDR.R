@@ -23,6 +23,8 @@ if (!require("plyr", quietly = TRUE)){
   install.packages("plyr")
 }
 
+library(plyr)
+
 if (!require("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 BiocManager::install("multtest")                                 
