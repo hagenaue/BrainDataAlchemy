@@ -7,10 +7,6 @@
 
 ######################
 
-#Grabbing input data and setting the working directory:
-
-######################
-
 #Installing and loading relevant code packages:
 
 if (!require("metafor", quietly = TRUE)){
@@ -39,6 +35,8 @@ library(multtest)
 
 #https://github.com/hagenaue/BrainDataAlchemy/blob/main/MetaAnalysis_GEOData_2026/Function_FalseDiscoveryCorrection.R
 
+#https://github.com/hagenaue/BrainDataAlchemy/blob/main/MetaAnalysis_GEOData_2026/Function_MakeForestPlots.R
+
 ######################
 
 #Read in the functions:
@@ -46,6 +44,8 @@ library(multtest)
 source("Function_RunBasicMetaAnalysis.R")
 
 source("Function_FalseDiscoveryCorrection.R")
+
+source("Function_MakeForestPlots.R")
 
 ######################
 
@@ -91,3 +91,29 @@ write.csv(influence_TF, "influence_TF.csv")
   
 FalseDiscoveryCorrection(metaOutput, MetaAnalysis_Annotation)
 
+###############
+
+#Writing out the meta-analysis input for record-keeping:
+
+write.csv(MetaAnalysis_FoldChanges, "MetaAnalysis_FoldChanges.csv")
+write.csv(MetaAnalysis_SV, "MetaAnalysis_SV.csv"
+
+###############
+
+#Make forest plots:
+
+#Example Code:
+
+#Set the lower and upper limits for the x-axis:
+Xaxis_LowerAndUpperBound<-c(-6,6)
+
+#Set the height of the plot in inches (should be preferably <11.5)
+HeightInInches<-5
+
+#Making forest plots - example:
+
+MakeForestPlots(metaOutputFDR_annotated, "Frem3_Frem3", Columns_DE, Xaxis_LowerAndUpperBound, HeightInInches)
+
+MakeForestPlots(metaOutputFDR_annotated, "Scin_Scin", Columns_DE, Xaxis_LowerAndUpperBound, HeightInInches)
+
+###############
