@@ -37,6 +37,8 @@ library(multtest)
 
 #https://github.com/hagenaue/BrainDataAlchemy/blob/main/MetaAnalysis_GEOData_2026/Function_MakeForestPlots.R
 
+#https://github.com/hagenaue/BrainDataAlchemy/blob/main/MetaAnalysis_GEOData_2026/Function_VolcanoPlot.R
+
 ######################
 
 #Read in the functions:
@@ -46,6 +48,8 @@ source("Function_RunBasicMetaAnalysis.R")
 source("Function_FalseDiscoveryCorrection.R")
 
 source("Function_MakeForestPlots.R")
+
+source("Function_VolcanoPlot.R")
 
 ######################
 
@@ -117,3 +121,25 @@ MakeForestPlots(metaOutputFDR_annotated, "Frem3_Frem3", Columns_DE, Xaxis_LowerA
 MakeForestPlots(metaOutputFDR_annotated, "Scin_Scin", Columns_DE, Xaxis_LowerAndUpperBound, HeightInInches)
 
 ###############
+
+#Make a volcano plot:
+
+#Example Usage:
+
+#Object containing differential expression or meta-analysis results:
+DE_Results<-metaOutputFDR_OrderbyPval
+
+#Categorical Variable of Interest:
+VariableOfInterest<-"Lifestyle Interventions"
+
+#Name of column containing Log2 Fold Change for the Variable of Interest:
+CoefficientCol<-"Log2FC_estimate"
+
+#Name of column containing p-value for the Variable of Interest:
+PvalueCol<-"pval"
+
+#Name of column containing FDR for the Variable of Interest:
+FDRCol<-"FDR"
+
+VolcanoPlot(DE_Results, VariableOfInterest, CoefficientCol, PvalueCol, FDRCol)
+
