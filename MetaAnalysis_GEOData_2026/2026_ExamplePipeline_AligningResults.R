@@ -186,11 +186,44 @@ plot(MetaAnalysis_FoldChanges$GSE299436_exercise~MetaAnalysis_FoldChanges$GSE111
 #I like using both.
 #The code for the RRHOs is a little complicated, but I'm happy to share if folks are interested.
 
+#Make a variable that is a vector of with the column numbers containing the DE output:
+#Example code for making a variable representing the columns 
+Columns_DE<-c(29:34)
+
 #Here's code for looking at the correlation of all of our log2FC results with all of our other log2FC results
 #This is called a correlation matrix:
 
-cor(as.matrix(MetaAnalysis_FoldChanges[,-c(1:28,33)]), use="pairwise.complete.obs", method="spearman")
-#There isn't much similarity across conditions here (outside of comparisons within the same experiment)
+Log2FC_CorMatrix<-cor(as.matrix(MetaAnalysis_FoldChanges[,Columns_DE]), use="pairwise.complete.obs", method="spearman")
+#There often isn't much similarity across conditions here (outside of comparisons within the same experiment)
 
-#An illustration of the correlation matrix using a hierarchically clustered heatmap, although somewhat pathetic:
-heatmap(cor(as.matrix(MetaAnalysis_FoldChanges[,-c(1:28,33)]), use="pairwise.complete.obs", method="spearman"))
+#The Log2FC correlation matrix is probably worth saving:
+write.csv(Log2FC_CorMatrix, "Log2FC_CorMatrix.csv")
+
+#Illustrating the correlation matrix using a hierarchically clustered heatmap:
+
+if (!requireNamespace("pheatmap", quietly = TRUE)) {
+  install.packages("pheatmap")
+}
+library(pheatmap)
+
+if (!requireNamespace("dichromat", quietly = TRUE)) {
+  install.packages("dichromat")
+}
+library(dichromat)
+
+
+pdf("Heatmap_CorMatrix_AllStudies.pdf",
+    height = 8.5, width = 8.5)
+
+pheatmap(Log2FC_CorMatrix,
+         color = colorRampPalette(c("#2166ac", "white", "#b2182b"))(100),
+         scale = "none",
+         breaks = seq(-1, 1, length.out = 101),
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         fontsize_row = 8,
+         fontsize_col = 8,  
+         width = 8.5,
+         height = 11,
+         border_color = NA)
+dev.off()
