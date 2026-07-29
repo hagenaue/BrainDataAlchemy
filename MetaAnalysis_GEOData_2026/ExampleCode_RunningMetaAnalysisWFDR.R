@@ -99,8 +99,8 @@ FalseDiscoveryCorrection(metaOutput, MetaAnalysis_Annotation)
 
 #Writing out the meta-analysis input for record-keeping:
 
-write.csv(MetaAnalysis_FoldChanges, "MetaAnalysis_FoldChanges.csv")
-write.csv(MetaAnalysis_SV, "MetaAnalysis_SV.csv"
+write.csv(MetaAnalysis_FoldChanges_ForMeta, "MetaAnalysis_FoldChanges_ForMeta.csv")
+write.csv(MetaAnalysis_SV_ForMeta, "MetaAnalysis_SV_ForMeta.csv")
 
 ###############
 
